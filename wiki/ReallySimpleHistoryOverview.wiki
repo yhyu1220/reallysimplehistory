@@ -1,0 +1,14 @@
+#summary main page for Really Simple History.
+
+= Introduction =
+
+Eventually, all documentation about RSH will move to this project. For now, here are some relevant links.
+
+= Details =
+
+Here's the current home for documentation of RSH:
+
+http://codinginparadise.org/projects/dhtml_history/README.html
+
+ 
+ 
