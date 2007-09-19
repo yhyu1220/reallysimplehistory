@@ -1,14 +1,25 @@
-#summary main page for Really Simple History.
+#summary Main wiki page for the Really Simple History JavaScript library.
 
 = Introduction =
 
-Eventually, all documentation about RSH will move to this project. For now, here are some relevant links.
+Really Simple History is
 
-= Details =
+= News = 
 
-Here's the current home for documentation of RSH:
+  * [http://www.linkedin.com/in/armchairdj  Brian Dillard] has come on as co-maintainer of RSH. 
+  ** [http://ajaxian.com/archives/brian-dillard-to-take-the-reigns-on-really-simple-history  Read Brad's announcement]
+  ** [http://blogs.pathf.com/agileajax/2007/09/really-simple-h.html Read Brian's announcement]
 
-http://codinginparadise.org/projects/dhtml_history/README.html
+= Current version: 0.4 =
 
+Brad Neuberg's original 0.4 version from 2005 is still the latest public release. Now that Brian Dillard has come on as co-maintainer, a new release is expected sometime in fall 2007.
+
+  * 0.4 release notes: ReleaseNotesVersionZeroPointFour
+  * 0.4 download: http://code.google.com/p/reallysimplehistory/downloads/list
+
+= Interesting links about Ajax history management =
+
+  * [http://weblogs.asp.net/bleroy/archive/2007/09/07/how-to-build-a-cross-browser-history-management-system.aspx How to Build a Cross-Browser History Management System]
+ 
  
  
