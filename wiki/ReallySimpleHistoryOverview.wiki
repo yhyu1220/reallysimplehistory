@@ -2,13 +2,14 @@
 
 = Introduction =
 
-Really Simple History is
+Really Simple History is a lightweight !JavaScript library for the management of bookmarking and browser history in Ajax/DHTML applications. Originally developed by [http://codinginparadise.org/ Brad Neuberg] in 2005, RSH has won a large user base for its simplicity, ease of use and lack of dependency on any specific Ajax framework. It's written in plain old !JavaScript and can be included on any site according to the terms of its BSD license. In September 2007, [http://www.linkedin.com/in/armchairdj  Brian Dillard] came on board as co-maintainer and ongoing code steward for the project. A new release, with support for additional modern browsers (IE7, Safari, Opera), is expected soon.
 
 = News = 
 
-  * [http://www.linkedin.com/in/armchairdj  Brian Dillard] has come on as co-maintainer of RSH. 
-  ** [http://ajaxian.com/archives/brian-dillard-to-take-the-reigns-on-really-simple-history  Read Brad's announcement]
-  ** [http://blogs.pathf.com/agileajax/2007/09/really-simple-h.html Read Brian's announcement]
+  * 09.18.2007: [http://www.linkedin.com/in/armchairdj  Brian Dillard] of [http://www.pathf.com Pathfinder Associates] has come on as co-maintainer of RSH. 
+   * [http://codinginparadise.org/weblog/2007/09/really-simple-history-finds-new-home.html  Read Brad's announcement]
+   * [http://blogs.pathf.com/agileajax/2007/09/really-simple-h.html Read Brian's announcement]
+   * [http://ajaxian.com/archives/brian-dillard-to-take-the-reigns-on-really-simple-history  Read the Ajaxian post]
 
 = Current version: 0.4 =
 
@@ -20,6 +21,9 @@ Brad Neuberg's original 0.4 version from 2005 is still the latest public release
 = Interesting links about Ajax history management =
 
   * [http://weblogs.asp.net/bleroy/archive/2007/09/07/how-to-build-a-cross-browser-history-management-system.aspx How to Build a Cross-Browser History Management System]
+ 
+ 
+ 
  
  
  
