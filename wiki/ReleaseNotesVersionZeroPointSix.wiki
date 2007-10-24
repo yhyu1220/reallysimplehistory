@@ -1,10 +1,16 @@
 #summary Release notes for the 0.6 beta version of RSH
 
-Brian and Brad are happy to announce the beta release of Really Simple History 06. This is the first attempt to update this library in two years. As such, we'd like your help putting it through its paces.
+Brian and Brad are happy to announce the beta release of Really Simple History 06. This is the first attempt to update this library in two years. As such, we'd like your help putting it through its paces. Please report any issues using the "Issues" tab here at Google Code or by emailing Brian at bdillard(at)pathf(dot)com. Brad continues on as RSH's proud poppa, but Brian takes all the complaints (and any congrats) for changes since 0.4.
+
+== Where to get it ==
+
+For latest stable, packaged-up ZIP files, go to the downloads page:
 
   * 0.6 download: http://code.google.com/p/reallysimplehistory/downloads/list
 
-== New features  and change log==
+For up-to-the-minute revisions, visit the "Source" tab here at Google Code. RSH is now in the SVN repo and Brian is commiting changes there atomically. When significant milestones are reached, he'll be packaging them up on the downloads page.
+
+== New features and change log==
 
   * Added support for IE7 (see "Known issue" list below)
   * Added support for Opera/Mac and Opera/Win (see "Known issue" list below) using Bertrand Le Roy's image method (see "Interesting links" section below)
@@ -22,6 +28,7 @@ Brian and Brad are happy to announce the beta release of Really Simple History 0
 === General issues ===
   * Current implementation clobbers window.onunload
   * Framework does not bail gracefully in unsupported browsers
+  * ~~For ... in loop in fireDebugMode breaks with certain libraries.~~ Fixed in 0.6.1!
 
 === Safari 2/Mac issues ===
 
