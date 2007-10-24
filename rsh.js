@@ -142,53 +142,50 @@ window.dhtmlHistory = {
 
 	/*public*/
 	getCurrentLocation: function() {
-		if (this.isSafari) {
-			var currentLocation = this.getSafariState();
-		}
-		else {
-			var currentLocation = this.removeHash(window.location.hash);
-		}
-		return currentLocation;
+		return (this.isSafari
+			? this.getSafariState()
+			: this.removeHash(window.location.hash)
+		);
 	},
 	
 	/*public: reset styles on behind-the-scenes DOM elements*/
 	fireDebugMode: function() {
-		var debugStyle = {
-			left: 'auto',
-			right: 'auto',
-			width: '800px',
-			height: '100px',
-			border: '1px solid black',
-			position: 'static'
-		};
-		for (var key in debugStyle) {
-			var val = debugStyle[key];
-			if (typeof val == 'string') {
-				historyStorage.storageField.style[key] = val;
-				if (this.isIE) {
-					this.iframe.style[key] = debugStyle[key];
-				}
-				else if (this.isSafari) {
-					val = (key == 'height' ? '30px' : val); 
-					this.safariStack.style[key] = val;
-				}
+		var debugStyle = [
+			'left:auto',
+			'right:auto',
+			'width:800px',
+			'height:100px',
+			'border:1px solid black',
+			'position:static'
+		];
+		for (var i = 0, j = debugStyle.length; i < j; i++) {
+			var item = debugStyle[i].split(":");
+			var key = item[0];
+			var val = item[1];
+			historyStorage.storageField.style[key] = val;
+			if (this.isIE) {
+				this.iframe.style[key] = val;
+			}
+			else if (this.isSafari) {
+				val = (key == 'height' ? '30px' : val); 
+				this.safariStack.style[key] = val;
 			}
 		}
 	},
 	
 	/*- - - - - - - - - - - - */
 	
-	/*private*/
-	PAGELOADEDSTRING: "DhtmlHistory_pageLoaded",/*Key for our own internal history event called when the page is loaded*/
+	/*private: Key for our own internal history event called when the page is loaded*/
+	PAGELOADEDSTRING: "DhtmlHistory_pageLoaded",
 	
-	/*private*/
-	WAIT_TIME: 200,/*milliseconds to wait between add requests - will be reset for certain browsers*/
+	/*private: milliseconds to wait between add requests - will be reset for certain browsers*/
+	WAIT_TIME: 200,
 	
-	/*private*/
-	debugging: false,/*if true, show various hidden DOM elements for debugging*/
+	/*private: if true, show various hidden DOM elements for debugging*/
+	debugging: false,
 
 	/*private*/
-	isIE:  ( document.all && navigator.userAgent.toLowerCase().indexOf('msie')!=-1 ),
+	isIE: ( document.all && navigator.userAgent.toLowerCase().indexOf('msie')!=-1 ),
 	
 	/*private*/
 	isOpera: ( navigator.userAgent.toLowerCase().indexOf('opera')!=-1),
@@ -196,26 +193,26 @@ window.dhtmlHistory = {
 	/*private*/
 	isSafari: ( navigator.userAgent.toLowerCase().indexOf('safari')!=-1),
 	
-	/*private*/
-	listener: null,/*Our history change listener. */	
+	/*private: Our history change listener. */
+	listener: null,
 
-	/*private*/
-	pollHandle: null,/*setInterval handle for our history polling */
+	/*private: setInterval handle for our history polling */
+	pollHandle: null,
 	
-	/*private*/
-	currentWaitTime: 0,/*milliseconds before an add request can execute */
+	/*private: milliseconds before an add request can execute */
+	currentWaitTime: 0,
 
-	/*private*/
-	currentLocation: null,/*Our current hash location, without the "#" symbol. */
+	/*private: Our current hash location, without the "#" symbol. */
+	currentLocation: null,
 
-	/*private*/
-	iframe: null,/*hidden iframe used to IE to detect history changes*/
+	/*private: hidden iframe used to IE to detect history changes*/
+	iframe: null,
 
-	/*private*/
-	safariHistoryStartPoint: null,/*Used only by Safari*/
+	/*private: Used only by Safari*/
+	safariHistoryStartPoint: null,
 
-	/*private*/
-	safariStack: null,/*Used only by Safari*/
+	/*private: Used only by Safari*/
+	safariStack: null,
 
 	/*private: flag used to handle edge cases*/
 	ignoreLocationChange: null,

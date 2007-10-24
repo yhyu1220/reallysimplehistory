@@ -21,7 +21,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	
-<title>Really Simple History Test Page</title>
+<title>Really Simple History: Test Page</title>
 
 <style type="text/css">
 	body {
@@ -222,35 +222,32 @@ function prettyPrintXml(content) {
 }
 
 
-var topLoaded = false;
 function logTopSubscriptions() {
 	log(prettyPrintXml(historyStorage.get('mySubscriptions')));
 }
 /* Gets the top 100 blog subscriptions as an OPML outline. - for a historyStorage test case */
 function loadTopSubscriptions() {
-	if (!topLoaded) {
-		log("Loading top subscriptions...");
-		var url = "top100.opml";
-		var request = getXHR();
-		var processRequest = function() {
-			if (request.readyState == 4) {
-				if (request.status == 200) {
-					historyStorage.put("mySubscriptions", request.responseText);
-					log("Top subscriptions loaded");
-					log('Put complex XML document into key "mySubscriptions"');
-					log('<a href="javascript:logTopSubscriptions();">Click here to log the entire XML document.</a> Warning: it\'s huge.');
-					topLoaded = true;
-				}
-				else {
-					var message = "There was a problem retrieving the subscription list: " + request.statusText
-					log(message);
-				}
+	log("Loading top subscriptions...");
+	var url = "top100.opml";
+	var request = getXHR();
+	var processRequest = function() {
+		if (request.readyState == 4) {
+			if (request.status == 200) {
+				historyStorage.put("mySubscriptions", request.responseText);
+				log("Top subscriptions loaded");
+				log('Put complex XML document into key "mySubscriptions"');
+				log('<a href="javascript:logTopSubscriptions();">Click here to log the entire XML document.</a> Warning: it\'s huge.');
+				topLoaded = true;
 			}
-		};
-		request.onreadystatechange = processRequest;
-		request.open("GET", url, true);
-		request.send("");
-	}     
+			else {
+				var message = "There was a problem retrieving the subscription list: " + request.statusText
+				log(message);
+			}
+		}
+	};
+	request.onreadystatechange = processRequest;
+	request.open("GET", url, true);
+	request.send("");
 }
 
 /*basic DHTML logging for our test page*/
