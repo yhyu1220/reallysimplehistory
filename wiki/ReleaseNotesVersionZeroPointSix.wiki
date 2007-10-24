@@ -1,4 +1,4 @@
-#Release notes for the 0.6 beta version of RSH
+#summary Release notes for the 0.6 beta version of RSH
 
 Brian and Brad are happy to announce the beta release of Really Simple History 06. This is the first attempt to update this library in two years. As such, we'd like your help putting it through its paces.
 
