@@ -25,8 +25,8 @@ Version 0.6 was released as a beta on 10.23.2007 with an eye toward a full publi
 
 Brad Neuberg's original 0.4 version from 2005 is still the latest public release.
 
-  * 0.4 release notes: ReleaseNotesVersionZeroPointFour
-  * 0.4 download: http://code.google.com/p/reallysimplehistory/downloads/list
+  * [ReleaseNotesVersionZeroPointFour 0.4 release notes]
+  * [http://code.google.com/p/reallysimplehistory/downloads/list 0.4 download]
 
 = Interesting links about Ajax history management =
 
