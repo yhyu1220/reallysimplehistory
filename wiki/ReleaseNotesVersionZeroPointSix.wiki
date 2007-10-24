@@ -33,7 +33,7 @@ Brian and Brad are happy to announce the beta release of Really Simple History 0
 === Opera 9.22/Mac and Opera 9.22/Win issues ===
 
   * Navigating away from RSH apps and then back to them kills history data (but not history entries)
-  * Browser error log shows messages when you insert hidden magical image via JavaScript, but errors do not affect browser performance. Only other solution is to hard-code the image in your page, but that would cause errors in other browsers, so leaving this for now. The Opera bug that requires this hack should be fixed by version 9.50.
+  * Browser error log shows messages when you insert hidden magical image via !JavaScript, but errors do not affect browser performance. Only other solution is to hard-code the image in your page, but that would cause errors in other browsers, so leaving this for now. The Opera bug that requires this hack should be fixed by version 9.50.
 
 === IE issues ===
   * History behaves erratically when user manually types in a new hash in the address bar; the code to handle this gracefully appears to have degraded; needs more investigation
