@@ -78,6 +78,8 @@ The current goal is to remedy as many of the above-named issues as possible befo
 
   * Add ability to disable the entire framework gracefully based on useragen
   * Add actual unit tests
+  * Perform proper garbage collection
+  * Document update abilities of the add() method
   * Provide better Opera version sniffing (> 9.10, < 9.50 are the ones that require the image hack)
   * Do less internal branching based on useragent - use functional programming patterns to redeclare methods by browser
   * Provide an options bundle when initializing so you can pass in a debug flag, override JSON methods, etc.
