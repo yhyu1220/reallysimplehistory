@@ -30,7 +30,7 @@ Brian and Brad are happy to announce the beta release of Really Simple History 0
   * Current Safari dhtmlHistory.add implementation doesn't enforce a timeout; may cause aberrant behavior
   * Safari 3/Mac beta has not been tested; Safari 3/Windows beta does not work due to insurmountable bugs in the current version (3.03)
 
-=== Safari issues ===
+=== Opera 9.22/Mac and Opera 9.22/Win issues ===
 
   * Navigating away from RSH apps and then back to them kills history data (but not history entries)
   * Browser error log shows messages when you insert hidden magical image via JavaScript, but errors do not affect browser performance. Only other solution is to hard-code the image in your page, but that would cause errors in other browsers, so leaving this for now. The Opera bug that requires this hack should be fixed by version 9.50.
