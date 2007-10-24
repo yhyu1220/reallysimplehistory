@@ -6,6 +6,7 @@ Really Simple History is a lightweight !JavaScript library for the management of
 
 = News = 
 
+  * 10.24.2007: RSH now has an SVN repo; small fixes to 0.6 have already been committed.
   * 10.23.2007: RSH 0.6 is now ready for beta-testing. See the 0.6 section below for more info.
   * 09.18.2007: [http://www.linkedin.com/in/armchairdj  Brian Dillard] of [http://www.pathf.com Pathfinder Associates] has come on as co-maintainer of RSH. 
    * [http://codinginparadise.org/weblog/2007/09/really-simple-history-finds-new-home.html  Read Brad's announcement]
@@ -16,9 +17,9 @@ Really Simple History is a lightweight !JavaScript library for the management of
 
 Version 0.6 was released as a beta on 10.23.2007 with an eye toward a full public release in a week or so.
 
-  * 0.6 beta release notes: ReleaseNotesVersionZeroPointSix
-  * 0.6 download: http://code.google.com/p/reallysimplehistory/downloads/list
-  * [http://blogs.pathf.com/agileajax/2007/10/coming-soon-rea.html Read Brian's blog post] 
+  * [ReleaseNotesVersionZeroPointSix 0.6 beta release notes]
+  * [http://code.google.com/p/reallysimplehistory/downloads/list 0.6 download]
+  * [http://blogs.pathf.com/agileajax/2007/10/coming-soon-rea.html Brian's blog post] 
 
 = Latest stable version: 0.4 =
 
