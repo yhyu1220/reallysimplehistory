@@ -44,6 +44,23 @@ Brian and Brad are happy to announce the beta release of Really Simple History 0
   * IE7/Vista
   * IE7/XP non-standalone
 
+== Supported and unsupported browsers ==
+
+=== Supported ===
+
+  * Firefox 2 (Mac and Windows)
+  * IE6
+  * IE7
+  * Opera 9.x (Mac and Windows)
+  * Safari 2.x (Mac)
+
+=== Unsupported ===
+
+  * All Linux browsers (FF probably works; support for others is on the wishlist)
+  * Safari 3.x (Mac) coming soon!
+  * Safari 3.x (Windows) impossible to support until browser bugs are fixed
+  * Any browser not listed above; test before you deploy.
+
 == Roadmap ==
 
 The current goal is to remedy as many of the above-named issues as possible before 0.6 gets a final release. We're not reporting any of these issues in the issue tracker for now; any issues that don't get fixed before the final release will be logged as bugs then.
