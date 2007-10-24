@@ -6,12 +6,75 @@ Really Simple History is a lightweight !JavaScript library for the management of
 
 = News = 
 
+  * 10.23.2007: RSH 0.6 is now ready for beta-testing. See the 0.6 section below for more info.
   * 09.18.2007: [http://www.linkedin.com/in/armchairdj  Brian Dillard] of [http://www.pathf.com Pathfinder Associates] has come on as co-maintainer of RSH. 
    * [http://codinginparadise.org/weblog/2007/09/really-simple-history-finds-new-home.html  Read Brad's announcement]
    * [http://blogs.pathf.com/agileajax/2007/09/really-simple-h.html Read Brian's announcement]
    * [http://ajaxian.com/archives/brian-dillard-to-take-the-reigns-on-really-simple-history  Read the Ajaxian post]
 
-= Current version: 0.4 =
+= Beta release: 0.6 =
+
+Brian and Brad are happy to announce the beta release of Really Simple History 06. This is the first attempt to update this library in two years. As such, we'd like your help putting it through its paces.
+
+== New features  and change log==
+
+  * Added support for IE7 (see "Known issue" list below)
+  * Added support for Opera/Mac and Opera/Win (see "Known issue" list below) using Bertrand Le Roy's image method (see "Interesting links" section below)
+  * Added support for Safari 2/Mac (see "Known issue" list below) using Bertrand Le Roy's hidden text-field method
+  * Modernized the JSON parser and moved it to a separate file
+  * Provided bridge methods for JSON calls to make it easier to swap out JSON parsers
+  * Rebuilt original test pages into a single test page that allows you to peek behind the scenes at hidden, hacked-in DOM elements
+  * Refactored many private and public methods for better support of more browsers
+  * Changed name of private historyStorage.init method to historyStorage.setup to avoid confucion with dhtmlHistory.initialize
+  * Removed unused isInternational() method
+  * Removed blocks of deprecated, commented-out code
+
+== Known issues ==
+
+=== General issues ===
+  * Current implementation clobbers window.onunload
+  * Framework does not bail gracefully in unsupported browsers
+
+=== Safari 2/Mac issues ===
+
+  * Use of RSH triggers "infinite loading" bug
+  * Navigating away from RSH apps and then back to them kills history data (but not history entries)
+  * Current Safari dhtmlHistory.add implementation doesn't enforce a timeout; may cause aberrant behavior
+  * Safari 3/Mac beta has not been tested; Safari 3/Windows beta does not work due to insurmountable bugs in the current version (3.03)
+
+=== Safari issues ===
+
+  * Navigating away from RSH apps and then back to them kills history data (but not history entries)
+  * Browser error log shows messages when you insert hidden magical image via JavaScript, but errors do not affect browser performance. Only other solution is to hard-code the image in your page, but that would cause errors in other browsers, so leaving this for now. The Opera bug that requires this hack should be fixed by version 9.50.
+
+=== IE issues ===
+  * History behaves erratically when user manually types in a new hash in the address bar; the code to handle this gracefully appears to have degraded; needs more investigation
+
+=== Browser scenarios that need to be tested ===
+  * Safari 3/Mac beta and nightly webkit builds
+  * Firefox for Linux
+  * IE7/Vista
+  * IE7/XP non-standalone
+
+== Roadmap ==
+
+The current goal is to remedy as many of the above-named issues as possible before 0.6 gets a final release. We're not reporting any of these issues in the issue tracker for now; any issues that don't get fixed before the final release will be logged as bugs then.
+
+=== Wishlist features/enhancements ===
+
+  * Add ability to disable the entire framework gracefully based on useragen
+  * Add actual unit tests
+  * Provide better Opera version sniffing (> 9.10, < 9.50 are the ones that require the image hack)
+  * Do less internal branching based on useragent - use functional programming patterns to redeclare methods by browser
+  * Provide an options bundle when initializing so you can pass in a debug flag, override JSON methods, etc.
+  * Provide a minified production version
+  * Make private methods actually private/protected
+  * Improve hash parsing logic with regexes
+  * Debug page: Use cookies to persist debug mode so it doesn't turn off when you navigate away and back
+  * Debug page: Add the ability for users to add test cases on the fly in the browser
+  * Debug page: improve log-window readability
+
+= Latest stable version: 0.4 =
 
 Brad Neuberg's original 0.4 version from 2005 is still the latest public release. Now that Brian Dillard has come on as co-maintainer, a new release is expected sometime in fall 2007.
 
@@ -20,7 +83,7 @@ Brad Neuberg's original 0.4 version from 2005 is still the latest public release
 
 = Interesting links about Ajax history management =
 
-  * [http://weblogs.asp.net/bleroy/archive/2007/09/07/how-to-build-a-cross-browser-history-management-system.aspx How to Build a Cross-Browser History Management System]
+  * [http://weblogs.asp.net/bleroy/archive/2007/09/07/how-to-build-a-cross-browser-history-management-system.aspx Bertrand Le Roy's How to Build a Cross-Browser History Management System]
  
  
  
