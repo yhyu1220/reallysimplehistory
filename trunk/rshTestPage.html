@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!--
+Copyright (c) 2007 Brian Dillard and Brad Neuberg:
+Brian Dillard | Project Lead | bdillard@pathf.com | http://blogs.pathf.com/agileajax/
+Brad Neuberg | Original Project Creator | http://codinginparadise.org
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
+(the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	
+<title>Really Simple History Test Page</title>
+
+<style type="text/css">
+	body {
+		margin: 0;
+		padding: 8px;
+		font: .9em "Trebuchet MS", verdana, arial, helvetica, sans-serif;		
+	}
+	p,h1,h2,div {
+		margin: 0 0 8px 0;
+		padding: 0;
+	}
+	.log{
+		width: 790px;
+		padding: 5px;
+		height: 120px;
+		border: 1px solid black;
+		overflow: auto;
+		color: #333;
+		font-size: .8em;
+	}
+	.log p{
+		margin: 0 0 5px 0;
+	}
+	#instructions{
+		border: 3px dashed #930;
+		padding: 10px;
+		width: 780px;
+		background-color: #ccc;
+		display: none;
+	}
+</style>
+
+<script type="text/javascript" src="json.js"></script>
+<script type="text/javascript" src="rsh0.6.js"></script>
+              
+<script language="JavaScript">
+
+window.onload = function() {
+	
+	//initialize our DHTML history
+	dhtmlHistory.initialize();
+	log("<b>dhtmlHistory initialized</b>", "logDH");
+
+	//subscribe to DHTML history change events
+	dhtmlHistory.addListener(historyChange);
+	log("<b>dhtmlHistory listener created</b>", "logDH");
+
+};
+
+function fireDebug() {
+	dhtmlHistory.fireDebugMode();
+}
+
+function printBrowserInfo() {
+	//Print out browser details for QA
+	log(
+		"navigator.appCodeName: " + navigator.appCodeName + "<br />"
+		+ "navigator.appName: " + navigator.appCodeName + "<br />"
+		+ "navigator.appVersion: " + navigator.appVersion + "<br />"
+		+ "navigator.userAgent: " + navigator.userAgent + "<br />"
+		+ "navigator.platform: " + navigator.platform + "<br />"
+	,"logBrowser");	
+}
+
+/*set up test cases for dhtmlHistory*/
+var rawIndex = 0;
+var rawMaterial = [
+	["one", "Hello World Data"],
+	["two", 33],
+	["three", true],
+	["four", true],
+	["5","let's try a digit"],
+	["four","value of 'four' has now been reset"],
+	["complexObject",{
+		value1: "This is value1",
+		value2: "This is value2",
+		value3: ["This is array[0]","This is array[1]"]
+	}],
+	["seven",[0,1,"three","five",9]],
+	["8","more data"]
+	["complexObject",{
+		new1: "all-new",
+		new2: "all-different",
+		new3: ["it's","the","uncanny","complexObject"]
+	}],
+];
+/*set up test cases for historyStorage*/
+function testHistoryStorage() {
+	historyStorage.put("removeMe1", "remove me 1");
+	log('historyStorage.put("removeMe1", "remove me 1")');
+
+	historyStorage.put("pageLoaded", true);
+	log('historyStorage.put("pageLoaded", true)');
+
+	historyStorage.put("message", "Hello World");
+	log('historyStorage.put("message", "Hello World")');
+
+	historyStorage.put("removeMe2", "remove me 2");
+	log('historyStorage.put("removeMe1", "remove me 2"');
+
+	historyStorage.put("field", "Watson, come quick!");
+	log('historyStorage.put("field", "Watson, come quick!")');
+
+	historyStorage.put("removeMe3", "remove me 3");
+	log('historyStorage.put("removeMe1", "remove me 3"');
+
+	historyStorage.put("complexObject",{
+		value1: "value1",
+		value2: "value2",
+		value3: ["array[0]","array[1]"]
+	});
+	log('Putting complex object into historyStorage');
+
+	historyStorage.remove("removeMe1");
+	historyStorage.remove("removeMe2");
+	historyStorage.remove("removeMe3");
+	log("Removing removeMe keys");
+
+	if (
+		historyStorage.hasKey("removeMe1")
+		|| historyStorage.hasKey("removeMe2")
+		|| historyStorage.hasKey("removeMe3")
+	){
+		log("Removal failed -- bug in framework");
+	}
+	else {
+		log("Removal succeeded");
+	}
+
+	var pageLoaded = historyStorage.get("pageLoaded");
+	log("getting key 'pageLoaded'="+pageLoaded);
+
+	log("hasKey(message)="+historyStorage.hasKey("message"));
+	var message = historyStorage.get("message");
+	log("getting key 'message'="+message);
+
+	log("hasKey(field)="+historyStorage.hasKey("field"));
+	var field = historyStorage.get("field");
+	log("getting key 'field'="+field);
+
+	log("hasKey(complexObject)="+historyStorage.hasKey("complexObject"));
+	var complexObject = historyStorage.get("complexObject");
+	log("complexObject.value1="+complexObject.value1);
+	log("complexObject.value2="+complexObject.value2);
+	log("complexObject.value3[0]="+complexObject.value3[0]);
+	log("complexObject.value3[1]="+complexObject.value3[1]);
+    
+	log("hasKey(bad)="+historyStorage.hasKey("bad"));
+	var bad = historyStorage.get("bad");
+	log("getting bad key 'bad', should be null="+bad);
+	log("historyStorage test suite now complete");
+}
+function testComplexXML() {
+	loadTopSubscriptions();
+}	
+
+function historyChange(newLocation, historyData) {
+	var historyMsg = (typeof historyData == "object" && historyData != null
+		? historyStorage.toJSONString(historyData)
+		: historyData
+	);
+	var msg = "<b>A history change has occured:</b> | newLocation=" + newLocation + " | historyData=" + historyMsg + " |";
+	log(msg,"logDH");
+};
+
+/* Our event handler to add history change events */
+addHistoryEvent = function() {
+	if (!rawMaterial[rawIndex]) {
+		rawIndex = 0;
+	}
+	var a = rawMaterial[rawIndex];
+	dhtmlHistory.add(a[0],a[1]);
+	if (typeof a[1] == "object") {/*stringify this so we can log it better*/
+		a[1] = historyStorage.toJSONString(a[1]);
+	}
+	var msg = "<b>A history event has been added:</b> [newLocation=" + a[0] + " | historyData=" + a[1] + "]";
+	log(msg, "logDH");
+	rawIndex++;
+}
+
+/*basic Ajax wrapper*/
+function getXHR() {
+	if (window.XMLHttpRequest) {
+		return new XMLHttpRequest();
+	} else if (window.ActiveXObject) {
+		return new ActiveXObject("Microsoft.XMLHTTP");
+	}
+}
+
+/* Converts pointy brackets into their HTML escape code equivalents so we can print out XML. */
+function prettyPrintXml(content) {
+	if (content == null) {
+		return null;
+	}
+	content = content.replace(/</g, "&lt;");
+	content = content.replace(/>/g, "&gt;<br />");
+	return content;
+}
+
+
+var topLoaded = false;
+function logTopSubscriptions() {
+	log(prettyPrintXml(historyStorage.get('mySubscriptions')));
+}
+/* Gets the top 100 blog subscriptions as an OPML outline. - for a historyStorage test case */
+function loadTopSubscriptions() {
+	if (!topLoaded) {
+		log("Loading top subscriptions...");
+		var url = "top100.opml";
+		var request = getXHR();
+		var processRequest = function() {
+			if (request.readyState == 4) {
+				if (request.status == 200) {
+					historyStorage.put("mySubscriptions", request.responseText);
+					log("Top subscriptions loaded");
+					log('Put complex XML document into key "mySubscriptions"');
+					log('<a href="javascript:logTopSubscriptions();">Click here to log the entire XML document.</a> Warning: it\'s huge.');
+					topLoaded = true;
+				}
+				else {
+					var message = "There was a problem retrieving the subscription list: " + request.statusText
+					log(message);
+				}
+			}
+		};
+		request.onreadystatechange = processRequest;
+		request.open("GET", url, true);
+		request.send("");
+	}     
+}
+
+/*basic DHTML logging for our test page*/
+function log(msg,node) {
+	var logNode = document.getElementById(node) || document.getElementById("logHS");
+	var content = "<p>" + msg + "</p>" + logNode.innerHTML;
+	logNode.innerHTML = content;
+}
+
+function toggleInstructions() {
+	var node = document.getElementById('instructions');
+	var state = node.style.display || "none";
+	node.style.display = (state == "none" ? "block" : "none");
+}
+
+</script>
+
+</head>
+
+<body>
+	<!--
+		Image for Opera, for those who want to hard-code it into the page
+		<img src="javascript:location.href='javascript:dhtmlHistory.checkLocation();';" style="visibility:hidden" />
+	-->
+
+<p>
+	| <a href="javascript:toggleInstructions();">toggle instructions</a>
+	| <a href="javascript:addHistoryEvent();">add history</a>
+	| <a href="http://www.google.com">go off-site</a>
+	| <a href="javascript:testHistoryStorage();">test storage</a>
+	| <a href="javascript:testComplexXML();">test complex XML</a>
+	| <a href="javascript:fireDebug();">enter debug mode</a>
+	| <a href="javascript:printBrowserInfo();">log browser info</a>
+|</p>
+
+<h1>Really Simple History Test Page</h1>
+
+<div id="instructions">
+	<h2>Really Simple History Testing Instructions</h2>
+	
+	<p>This utility is designed to test the functionality of Really Simple History's historyStorage and dhtmlHistory objects.</p>
+	
+	<p>Use the links above to:</p>
+	
+	<ul>
+		<li>Add history events one at a time and see them logged in the dhtmlHistory log window.</li>
+		<li>Navigate off-site so you can then return with the back button and confirm your history was retained.</li>
+		<li>Run a large suite of historyStorage tests and view the results in the historyStorage log window.</li>
+		<li>Run a separate historyStorage test to see how it handles serialization of complex XML data loaded via XHR.</li>
+		<li>Send dhtmlHistory and historyStorage into debug mode, where all hidden DOM elements get unhidden. This allows you to track the library's behind-the-scenes activities by peering into the textarea that serves as its storage bin and the Safari- and IE-only form fields that help overcome those browsers' peculiarities.</li>
+		<li>Print your browser stats to yet another log window so you can report browser-specific bugs over in the <a href="http://code.google.com/p/reallysimplehistory/">Google Code</a> issue tracker.</li>
+	</ul>
+	
+	<p><b>CAVEAT:</b>Don't try to run this test page, or RSH in general, from your desktop. Always view it from a webserver (even localhost); otherwise its behavior will be extremely flaky, especially in IE.</p>
+	
+	<p><b>QUESTIONS?</b> Email bdillard(at)pathf(dot)com or log something in the issue tracker.</p>
+	
+	<a href="javascript:toggleInstructions();">hide these instructions</a>
+</div>
+
+<h2>dhtmlHistory Log</h2>
+<div class="log" id="logDH"></div>
+
+<h2>historyStorage Log</h2>
+<div class="log" id="logHS"></div>
+
+<h2>Browser Info Log</h2>
+<div class="log" id="logBrowser"></div>
+
+</body>
+</html>
+
