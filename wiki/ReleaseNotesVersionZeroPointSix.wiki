@@ -1,14 +1,16 @@
 #summary Release notes for the 0.6 beta version of RSH
 
-Brian and Brad are happy to announce the beta release of Really Simple History 06. This is the first attempt to update this library in two years. As such, we'd like your help putting it through its paces. Please report any issues using the "Issues" tab here at Google Code or by emailing Brian at bdillard(at)pathf(dot)com. Brad continues on as RSH's proud poppa, but Brian takes all the complaints (and any congrats) for changes since 0.4.
+Brian and Brad are happy to announce the beta release of Really Simple History 06. This is the first attempt to update this library in two years. As such, we'd like your help putting it through its paces. Please report any issues using the [http://code.google.com/p/reallysimplehistory/sourcehttp://code.google.com/p/reallysimplehistory/issues/list Google Code Issues tab] or by emailing Brian at bdillard(at)pathf(dot)com. Brad continues on as RSH's proud poppa, but Brian takes all the complaints (and any congrats) for changes since 0.4.
 
 == Where to get it ==
 
 For latest stable, packaged-up ZIP files, go to the downloads page:
 
-  * 0.6 download: http://code.google.com/p/reallysimplehistory/downloads/list
+  * [http://code.google.com/p/reallysimplehistory/downloads/list 0.6 download]
 
-For up-to-the-minute revisions, visit the "Source" tab here at Google Code. RSH is now in the SVN repo and Brian is commiting changes there atomically. When significant milestones are reached, he'll be packaging them up on the downloads page.
+For up-to-the-minute revisions, visit the SVN repo. RSH is now (finally) version-controlled, and Brian is commiting changes there atomically. When significant milestones are reached, he'll be packaging them up on the downloads page.
+
+  * [http://code.google.com/p/reallysimplehistory/source Google Code Source tab]
 
 == New features and change log==
 
