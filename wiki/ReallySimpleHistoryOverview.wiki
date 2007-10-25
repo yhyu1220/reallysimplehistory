@@ -40,7 +40,7 @@ Brad Neuberg's original 0.4 version from 2005 is still the latest public release
   * [http://mattsnider.com/javascript/more-on-really-simple-history/ More on Really Simple History | Matt Snider JavaScript Resource]
   * [http://www.asp.net/ajax/AjaxControlToolkit/ ASP.NET AJAX Control Toolkit : The Official Microsoft ASP.NET 2.0 Site]
   * [http://dev2dev.bea.com/pub/a/2006/01/ajax-back-button.html Developing Ajax Applications That Preserve Standard Browser Functionality]
-  * [http://my.opera.com/community/forums/topic.dml?id=197771&t=1189129479&page=1 [err] back button &amp; timers - Opera browser - Opera Community]
+  * [http://my.opera.com/community/forums/topic.dml?id=197771&t=1189129479&page=1 Back button &amp; timers - Opera browser - Opera Community]
   * [http://codinginparadise.org/weblog/2005/09/safari-no-dhtml-history-possible.html Brad Neuberg: Coding In Paradise: Safari: No DHTML History Possible]
   * [http://codinginparadise.org/weblog/2006/06/ajax-history-support-in-safari.html Brad Neuberg: Coding In Paradise: Ajax History Support in Safari Possible?]
   * [http://www.contentwithstyle.co.uk/Blog/113/safari-ajax-and-the-back-button Content with Style: Safari, Ajax and the back button]
