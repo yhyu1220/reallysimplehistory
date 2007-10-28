@@ -1,4 +1,4 @@
-#summary Brad Neuberg's original release notes for version 0.4
+#summary Release notes for version 0.4 - adapted from Brad Neuberg's original site.
 
 =What is This?=
 
