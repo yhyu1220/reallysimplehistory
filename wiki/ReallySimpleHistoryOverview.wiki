@@ -1,9 +1,5 @@
 #summary Main wiki page for the Really Simple History JavaScript library.
 
-= Introduction =
-
-Really Simple History is a lightweight !JavaScript library for the management of bookmarking and browser history in Ajax/DHTML applications. Originally developed by [http://codinginparadise.org/ Brad Neuberg] in 2005, RSH has won a large user base for its simplicity, ease of use and lack of dependency on any specific Ajax framework. It's written in plain old !JavaScript and can be included on any site according to the terms of its BSD license. In September 2007, [http://www.linkedin.com/in/armchairdj  Brian Dillard] came on board as co-maintainer and ongoing code steward for the project. A new release, with support for additional modern browsers (IE7, Safari, Opera), is currently in beta release; it should go public around 11/01/2007.
-
 = Beta release: 0.6 =
 
 Version 0.6 was released as a beta on 10.23.2007 with an eye toward a full public release in a week or so.
