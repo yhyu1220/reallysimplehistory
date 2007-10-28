@@ -35,8 +35,8 @@ For up-to-the-minute revisions, visit the SVN repo. RSH is now (finally) version
 === Safari 2/Mac issues ===
 
   * Use of RSH triggers "infinite loading" bug
-  * Navigating away from RSH apps and then back to them kills history data (but not history entries)
-  * Current Safari dhtmlHistory.add implementation doesn't enforce a timeout; may cause aberrant behavior
+  * ~~Navigating away from RSH apps and then back to them kills history data (but not history entries)!! Fixed in 0.6.1!
+  * ~~Current Safari dhtmlHistory.add implementation doesn't enforce a timeout; may cause aberrant behavior~~ Not an issue. Using a timeout actually causes problems.
   * Safari 3/Mac beta has not been tested; Safari 3/Windows beta does not work due to insurmountable bugs in the current version (3.03)
 
 === Opera 9.22/Mac and Opera 9.22/Win issues ===
@@ -76,7 +76,7 @@ The current goal is to remedy as many of the above-named issues as possible befo
 
 === Wishlist features/enhancements ===
 
-  * Add ability to disable the entire framework gracefully based on useragen
+  * Add ability to disable the entire framework gracefully based on useragent
   * Add actual unit tests
   * Perform proper garbage collection
   * Document update abilities of the add() method
