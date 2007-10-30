@@ -144,10 +144,20 @@ window.dhtmlHistory = {
 	getCurrentLocation: function() {
 		var r = (this.isSafari
 			? this.getSafariState()
-			: this.removeHash(window.location.hash)
+			: this.getCurrentHash()
 		);
 		return r;
 	},
+	
+	/*public: manually parse the current url for a hash; tip of the hat to YUI*/
+    getCurrentHash: function() {
+		var r = window.location.href;
+		var i = r.indexOf("#");
+		return (i >= 0
+			? r.substr(i+1)
+			: null
+		);
+    },
 	
 	/*public: switch debug mode on and off and toggle associated styles*/
 	setDebugMode: function(newDebugMode) {
@@ -164,12 +174,15 @@ window.dhtmlHistory = {
 				var item = styles[i].split(":");
 				var key = item[0];
 				var val = item[1];
+				var formVal = (key == 'border' ? '0' : val);
+				historyStorage.storageForm.style[key] = formVal;
 				historyStorage.storageField.style[key] = val;
 				if (this.isIE) {
 					this.iframe.style[key] = val;
 				}
 				else if (this.isSafari) {
 					val = (key == 'height' ? '30px' : val); 
+					this.safariForm.style[key] = formVal;
 					this.safariStack.style[key] = val;
 					this.safariLength.style[key] = val;
 				}
@@ -214,9 +227,9 @@ window.dhtmlHistory = {
 
 	/*private: Used only by Safari*/
 	safariHistoryStartPoint: null,
-
-	/*private: Used only by Safari*/
+	safariForm: null,
 	safariStack: null,
+	safariLength: null,
 
 	/*private: flag used to handle edge cases*/
 	ignoreLocationChange: null,
@@ -245,19 +258,19 @@ window.dhtmlHistory = {
 		if (this.isIE) {
 			this.WAIT_TIME = 400;/*IE needs longer between history updates*/
 
-			var rshIframeID = "rshIDHistoryFrame";
-			var rshIframeHTML = '<iframe name="' + rshIframeID + '" id="' + rshIframeID + '" style="' + historyStorage.hideStyles
+			var iframeID = "rshHistoryFrame";
+			var iframeHTML = '<iframe frameborder="0" name="' + iframeID + '" id="' + iframeID + '" style="' + historyStorage.hideStyles
 				+ '" src="blank.html?' + initialHash + '"></iframe>'
 			;
-			document.write(rshIframeHTML);
-			this.iframe = document.getElementById(rshIframeID);
+			document.write(iframeHTML);
+			this.iframe = document.getElementById(iframeID);
 		}
 	},
 	
 	/*private: Create Opera-specific DOM nodes and overrides*/
 	createOpera: function() {
 		if (this.isOpera) {
-			var imgHTML = '<img src="javascript:location.href=\'javascript:dhtmlHistory.checkLocation();\';" style="visibility:hidden" />';
+			var imgHTML = '<img src="javascript:location.href=\'javascript:dhtmlHistory.checkLocation();\';" style="' + historyStorage.hideStyles + ';visibility:hidden;" />';
 			document.write(imgHTML);
 		}
 	},
@@ -266,14 +279,16 @@ window.dhtmlHistory = {
 	createSafari: function() {
 		if (this.isSafari) {
 			this.WAIT_TIME = 400;
+			var formID = "rshSafariForm";
 			var stackID = "rshSafariStack";
 			var lengthID = "rshSafariLength";
-			var stackHTML = '<form>'
+			var stackHTML = '<form id="' + formID + '" style="' + this.hideStyles + '">';
 				+ '<input type="text" style="' + historyStorage.hideStyles + '" id="' + stackID + '" value="[]"/>'
 				+ '<input type="text" style="' + historyStorage.hideStyles + '" id="' + lengthID + '" value=""/>'
 				+ '</form>'
 			;
 			document.write(stackHTML);
+			this.safariForm = document.getElementById(formID);
 			this.safariStack = document.getElementById(stackID);
 			this.safariLength = document.getElementById(lengthID);
 			if (!historyStorage.hasKey(this.PAGELOADEDSTRING)) {
@@ -313,7 +328,7 @@ window.dhtmlHistory = {
 		this.isOpera = (UA.indexOf('opera') != -1),
 		this.isSafari = (UA.indexOf('safari') != -1),
 		
-		/*create Opera/Safari-specific code*/
+		/*execute browser-specific setup methods*/
 		this.createSafari();
 		this.createOpera();
 		
@@ -371,7 +386,7 @@ window.dhtmlHistory = {
 		this.listener.call(null, newHash, historyData);
 	},
 	
-	/*private: Sees if the browsers has changed location.  This is the primary history mechanism for Firefox. For IE, we use this to
+	/*private: Sees if the browser has changed location. This is the primary history mechanism for Firefox. For IE, we use this to
 	handle an important edge case: if a user manually types in a new hash value into their IE location bar and press enter, we want to
 	to intercept this and notify any history listener.*/
 	checkLocation: function() {
@@ -558,15 +573,22 @@ window.historyStorage = {
 	/*private: If true, we have loaded our hash table out of the storage form. */
 	hashLoaded: false, 
 
-	/*private: A reference to our textarea field. */
+	/*private: References to our history field and its surrounding form */
+	storageForm: null,
 	storageField: null,
 
 	/*private: write a hidden form and textarea into the page*/
 	setup: function() {
+		var formID = "rshStorageForm";
 		var textareaID = "rshStorageField";
-		var textareaHTML = '<form><textarea id="' + textareaID + '" style="' + this.hideStyles + '"></textarea></form>';
+		var textareaHTML = '<form id="' + formID + '" style="' + this.hideStyles + '">'
+			+ '<textarea id="' + textareaID + '" style="' + this.hideStyles + '"></textarea>'
+			+ '</form>'
+		;
 		document.write(textareaHTML);
+		this.storageForm = document.getElementById(formID);
 		this.storageField = document.getElementById(textareaID);
+		this.storageField.focus();
 	},
 
 	/*private: Asserts that a key is valid, throwing an exception if it is not. */
@@ -583,8 +605,8 @@ window.historyStorage = {
 			var serializedHashTable = this.storageField.value;
 			if (serializedHashTable != "" && serializedHashTable != null) {
 				this.storageHash = this.parseJSON(serializedHashTable);
+				this.hashLoaded = true;/*TODO BD: figure out whether moving this was a good idea; also how to optimize timing and number off calls to this method*/
 			}
-			this.hashLoaded = true;
 		}
 	},
 
@@ -620,3 +642,4 @@ window.historyStorage = {
 /*instantiate our objects*/
 window.historyStorage.setup();
 window.dhtmlHistory.create();
+
