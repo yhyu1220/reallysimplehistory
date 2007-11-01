@@ -8,7 +8,7 @@ For latest stable, packaged-up ZIP files, go to the downloads page:
 
   * [http://code.google.com/p/reallysimplehistory/downloads/list 0.6 download]
 
-For up-to-the-minute revisions, visit the SVN repo. RSH is now (finally) version-controlled, and Brian is commiting changes there atomically. When significant milestones are reached, he'll be packaging them up on the downloads page.
+For up-to-the-minute revisions, visit the SVN repo. RSH is now (finally) version-controlled, and Brian is commiting changes there atomically. When significant milestones are reached, he'll be packaging them up on the downloads page. *In the meantime, the supported browsers list and the issues list below are being updated to reflect the state of the SVN repo.*
 
   * [http://code.google.com/p/reallysimplehistory/source Google Code Source tab]
 
@@ -37,42 +37,45 @@ For up-to-the-minute revisions, visit the SVN repo. RSH is now (finally) version
   * Use of RSH triggers "infinite loading" bug
   * ~~Navigating away from RSH apps and then back to them kills history data (but not history entries)!!~~ Fixed in 0.6.1!
   * ~~Current Safari dhtmlHistory.add implementation doesn't enforce a timeout; may cause aberrant behavior~~ Not an issue. Using a timeout actually causes problems.
-  * Safari 3/Mac beta has not been tested; Safari 3/Windows beta does not work due to insurmountable bugs in the current version (3.03)
+  * ~~Safari 3/Mac beta has not been tested~~; Safari 3/Windows beta does not work due to insurmountable bugs in the current version (3.03)
 
 === Opera 9.22/Mac and Opera 9.22/Win issues ===
 
-  * Navigating away from RSH apps and then back to them kills history data (but not history entries)
-  * Browser error log shows messages when you insert hidden magical image via !JavaScript, but errors do not affect browser performance. Only other solution is to hard-code the image in your page, but that would cause errors in other browsers, so leaving this for now. The Opera bug that requires this hack should be fixed by version 9.50.
+  * ~~Navigating away from RSH apps and then back to them kills history data (but not history entries)~~
+  * ~~Browser error log shows messages when you insert hidden magical image via !JavaScript, but errors do not affect browser performance. Only other solution is to hard-code the image in your page, but that would cause errors in other browsers, so leaving this for now.~~
+  * ~~Opera 9.5/Mac and 9.5/PC not tested.~~ Both tested, both work, but must check to see whether we can get rid of the image hack in these versions.
 
 === IE issues ===
   * History behaves erratically when user manually types in a new hash in the address bar; the code to handle this gracefully appears to have degraded; needs more investigation
 
 === Browser scenarios that need to be tested ===
-  * Safari 3/Mac beta and nightly webkit builds
-  * Firefox for Linux
+  * ~Safari 3/Mac beta~ and nightly webkit builds
+  * ~~Opera 9.5/Mac and 9.5/PC~~
+  * Firefox for Red Hat
+  * ~~Firefox for Ubuntu~~
   * IE7/Vista
   * IE7/XP non-standalone
+  * All Mac browsers on Leopard (Opera 9.22/9.5/Safari 2?/Safari 3/Firefox 2)
 
 == Supported and unsupported browsers ==
 
 === Supported ===
 
-  * Firefox 2 (Mac and Windows)
   * IE6
   * IE7
-  * Opera 9.x (Mac and Windows)
-  * Safari 2.x (Mac)
+  * Firefox 2.x (Mac, Windows, Linux)
+  * Opera 9.22-9.5 (Mac and Windows)
+  * Safari 2.03, 2.04 and 3.03 (Mac)
 
 === Unsupported ===
 
   * All Linux browsers (FF probably works; support for others is on the wishlist)
-  * Safari 3.x (Mac) coming soon!
-  * Safari 3.x (Windows) impossible to support until browser bugs are fixed
+  * Safari 3.x (Windows): It works as long as your RSH app isn't the first page you visit, but even then back and forward button bugs in the browser itself can cause problems.
   * Any browser not listed above; test before you deploy.
 
 == Roadmap ==
 
-The current goal is to remedy as many of the above-named issues as possible before 0.6 gets a final release. We're not reporting any of these issues in the issue tracker for now; any issues that don't get fixed before the final release will be logged as bugs then.
+The current goal is to remedy as many of the above-named issues as possible before the next public release. We're starting to migrate issues from this page into the issue tracker now that the major ones have been tackled.
 
 === Wishlist features/enhancements ===
 
