@@ -34,7 +34,7 @@ For up-to-the-minute revisions, visit the SVN repo. RSH is now (finally) version
 
 === Safari 2/Mac issues ===
 
-  * Use of RSH triggers "infinite loading" bug
+  * Still a bug but migrated to the Issue tracker: _Use of RSH triggers "infinite loading" bug_
   * ~~Navigating away from RSH apps and then back to them kills history data (but not history entries)!!~~ Fixed in 0.6.1!
   * ~~Current Safari dhtmlHistory.add implementation doesn't enforce a timeout; may cause aberrant behavior~~ Not an issue. Using a timeout actually causes problems.
   * ~~Safari 3/Mac beta has not been tested~~; Safari 3/Windows beta does not work due to insurmountable bugs in the current version (3.03)
@@ -46,7 +46,7 @@ For up-to-the-minute revisions, visit the SVN repo. RSH is now (finally) version
   * ~~Opera 9.5/Mac and 9.5/PC not tested.~~ Both tested, both work, but must check to see whether we can get rid of the image hack in these versions.
 
 === IE issues ===
-  * History behaves erratically when user manually types in a new hash in the address bar; the code to handle this gracefully appears to have degraded; needs more investigation
+  * Still a bug but migrated to the Issue tracker: _History behaves erratically when user manually types in a new hash in the address bar; the code to handle this gracefully appears to have degraded; needs more investigation._
 
 === Browser scenarios that need to be tested ===
   * ~~Safari 3/Mac beta~~ and nightly webkit builds
