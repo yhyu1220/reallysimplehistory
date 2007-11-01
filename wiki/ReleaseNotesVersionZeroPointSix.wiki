@@ -56,6 +56,7 @@ For up-to-the-minute revisions, visit the SVN repo. RSH is now (finally) version
   * IE7/Vista
   * IE7/XP non-standalone
   * All Mac browsers on Leopard (Opera 9.22/9.5/Safari 2?/Safari 3/Firefox 2)
+  * Non-Firefox Mozilla clients, all platforms (Netscape, Mozilla, etc.)
 
 == Supported and unsupported browsers ==
 
@@ -63,13 +64,13 @@ For up-to-the-minute revisions, visit the SVN repo. RSH is now (finally) version
 
   * IE6
   * IE7
-  * Firefox 2.x (Mac, Windows, Linux)
+  * Firefox 2.x (Mac, Windows, Ubuntu)
   * Opera 9.22-9.5 (Mac and Windows)
   * Safari 2.03, 2.04 and 3.03 (Mac)
 
 === Unsupported ===
 
-  * All Linux browsers (FF probably works; support for others is on the wishlist)
+  * Non-Mozilla-based Linux browsers
   * Safari 3.x (Windows): It works as long as your RSH app isn't the first page you visit, but even then back and forward button bugs in the browser itself can cause problems.
   * Any browser not listed above; test before you deploy.
 
