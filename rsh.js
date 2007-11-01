@@ -282,7 +282,7 @@ window.dhtmlHistory = {
 			var formID = "rshSafariForm";
 			var stackID = "rshSafariStack";
 			var lengthID = "rshSafariLength";
-			var stackHTML = '<form id="' + formID + '" style="' + this.hideStyles + '">';
+			var stackHTML = '<form id="' + formID + '" style="' + this.hideStyles + '">'
 				+ '<input type="text" style="' + historyStorage.hideStyles + '" id="' + stackID + '" value="[]"/>'
 				+ '<input type="text" style="' + historyStorage.hideStyles + '" id="' + lengthID + '" value=""/>'
 				+ '</form>'
@@ -609,18 +609,22 @@ window.historyStorage = {
 			}
 		}
 	},
-
 	/*private: Saves the hash table into the form. */
 	saveHashTable: function() {
 		this.loadHashTable();
 		var serializedHashTable = this.toJSONString(this.storageHash);
 		this.storageField.value = serializedHashTable;
 	},
-	
 	/*private: A bridge for our toJSONString implementation. */
-	toJSONString: function(s) {
-		if (s.toJSONString) {
-			return s.toJSONString();
+	toJSONString: function(o) {
+		if (typeof JSON != 'undefined' && JSON.stringify) {
+			return JSON.stringify(o);/*2005 JSON lib*/
+		}
+		else if (o.toJSONString) {
+			return o.toJSONString();/*2007 JSON lib*/
+		}
+		else if (Object.toJSON) {
+			return Object.toJSON(o);/*Prototype*/
 		}
 		else {
 			var e = "No JSON stringify method defined."
@@ -629,8 +633,14 @@ window.historyStorage = {
 	},
 	/*private: A bridge for our parseJSON implementation. */
 	parseJSON: function(s) {
-		if (s.parseJSON) {
-			return s.parseJSON();
+		if (typeof JSON != 'undefined'  && JSON.parse) {
+			return JSON.parse(s);/*2005 JSON lib*/
+		}
+		else if (s.parseJSON) {
+			return s.parseJSON();/*2007 JSON lib*/
+		}
+		else if (s.evalJSON) {
+			return s.evalJSON();/*Prototype*/
 		}
 		else {
 			var e = "No JSON parse method defined."
