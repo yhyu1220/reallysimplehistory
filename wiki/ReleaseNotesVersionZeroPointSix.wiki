@@ -49,7 +49,7 @@ For up-to-the-minute revisions, visit the SVN repo. RSH is now (finally) version
   * History behaves erratically when user manually types in a new hash in the address bar; the code to handle this gracefully appears to have degraded; needs more investigation
 
 === Browser scenarios that need to be tested ===
-  * ~Safari 3/Mac beta~ and nightly webkit builds
+  * ~~Safari 3/Mac beta~~ and nightly webkit builds
   * ~~Opera 9.5/Mac and 9.5/PC~~
   * Firefox for Red Hat
   * ~~Firefox for Ubuntu~~
