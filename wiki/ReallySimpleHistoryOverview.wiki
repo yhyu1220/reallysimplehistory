@@ -17,6 +17,7 @@ Brad Neuberg's original 0.4 version from 2005 is still the latest public release
 
 = Interesting links about Ajax history management =
 
+  * [http://exanimo.com/javascript/using-the-statemanager-in-ajax-apps/ State Manager: Flash history manager that also works with Ajax]
   * [http://www.onjava.com/pub/a/onjava/2005/10/26/ajax-handling-bookmarks-and-back-button.html ONJava.com -- AJAX: How to Handle Bookmarks and Back Buttons]
   * [http://weblogs.asp.net/bleroy/archive/2007/09/07/how-to-build-a-cross-browser-history-management-system.aspx Bertrand Le Roy's How to build a cross-browser history management system - Tales from the Evil Empire]
   * [http://ajaxian.com/archives/how-to-build-a-cross-browser-history-management-system Ajaxian » How to build a cross-browser history management system]
