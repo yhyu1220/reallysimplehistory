@@ -24,7 +24,27 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 <title>Really Simple History: Test Page</title>
 
 <script type="text/javascript" src="json2007.js"></script>
+<!--
+	<script type="text/javascript" src="json2005.js"></script>
+	<script type="text/javascript" src="prototype.js"></script>
+-->
 <script type="text/javascript" src="rsh.js"></script>
+
+<script type="text/javascript">
+/*instantiate our history object*/
+window.dhtmlHistory.create({
+	debugMode: true
+	//, toJSON: function(o) {
+		//return JSON.stringify(o);/*2005 JSON lib*/
+		//return Object.toJSON(o);/*Prototype*/
+	//}
+	//, fromJSON: function(s) {
+		//return JSON.parse(s);/*2005 JSON lib*/
+		//return s.evalJSON();/*Prototype*/
+	//}
+});
+</script>
+
 <script type="text/javascript">
 window.onload = function() {
 	
@@ -35,8 +55,6 @@ window.onload = function() {
 	//subscribe to DHTML history change events
 	dhtmlHistory.addListener(historyChange);
 	log("<b>dhtmlHistory listener created</b>");
-	
-	checkDebug();
 	
 };
 
@@ -154,7 +172,7 @@ function testComplexXML() {
 
 function historyChange(newLocation, historyData) {
 	var historyMsg = (typeof historyData == "object" && historyData != null
-		? historyStorage.toJSONString(historyData)
+		? historyStorage.toJSON(historyData)
 		: historyData
 	);
 	var msg = "<b>A history change has occured:</b> | newLocation=" + newLocation + " | historyData=" + historyMsg + " |";
@@ -169,7 +187,7 @@ addHistoryEvent = function() {
 	var a = rawMaterial[rawIndex];
 	dhtmlHistory.add(a[0],a[1]);
 	if (typeof a[1] == "object") {/*stringify this so we can log it better*/
-		a[1] = historyStorage.toJSONString(a[1]);
+		a[1] = historyStorage.toJSON(a[1]);
 	}
 	var msg = "<b>A history event has been added:</b> [newLocation=" + a[0] + " | historyData=" + a[1] + "]";
 	log(msg);
@@ -246,47 +264,6 @@ function viewObjectState() {
 	}
 	log("<b>Done dumping historyStorage object state</b>");
 }
-function toggleDebug() {
-	var theCookie = readCookie("debug");
-	if (theCookie) {
-		dhtmlHistory.setDebugMode(false);
-		eraseCookie("debug");
-	}
-	else {
-		dhtmlHistory.setDebugMode(true);
-		createCookie("debug","true");
-	}
-}
-function checkDebug() {
-	var theCookie = readCookie("debug");
-	if (theCookie) {
-		dhtmlHistory.setDebugMode(true);
-	}
-}
-/*cookie functions shamelessly stolen from Peter-Paul Koch @ quirksmode.org*/
-function createCookie(name,value,days) {
-	if (days) {
-		var date = new Date();
-		date.setTime(date.getTime()+(days*24*60*60*1000));
-		var expires = "; expires="+date.toGMTString();
-	}
-	else var expires = "";
-	document.cookie = name+"="+value+expires+"; path=/";
-}
-function readCookie(name) {
-	var nameEQ = name + "=";
-	var ca = document.cookie.split(';');
-	for(var i=0;i < ca.length;i++) {
-		var c = ca[i];
-		while (c.charAt(0)==' ') c = c.substring(1,c.length);
-		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-	}
-	return null;
-}
-function eraseCookie(name) {
-	createCookie(name,"",-1);
-}
-
 </script>
 
 <style type="text/css">
@@ -342,14 +319,8 @@ function eraseCookie(name) {
 
 <body>
 	
-	<!--
-		Image for Opera, for those who want to hard-code it into the page
-		<img src="javascript:location.href='javascript:dhtmlHistory.checkLocation();';" style="visibility:hidden" />
-	-->
-
 <p>
 	| <a href="javascript:toggleInstructions();">toggle instructions</a>
-	| <a href="javascript:toggleDebug();">toggle debug mode</a>
 	| <a href="javascript:printBrowserInfo();">log browser</a>
 	| <a href="javascript:viewObjectState();">log object state</a>	
 	| <a href="javascript:clearLog();">clear log</a>
@@ -375,7 +346,6 @@ function eraseCookie(name) {
 		<li>Navigate off-site so you can then return with the back button and confirm your history was retained.</li>
 		<li>Run a large suite of historyStorage tests and view the results.</li>
 		<li>Run a separate historyStorage test to see how it handles serialization of complex XML data loaded via XHR.</li>
-		<li>Send dhtmlHistory and historyStorage into debug mode, where all hidden DOM elements get unhidden. This allows you to track the library's behind-the-scenes activities by peering into the various hidden form fields that allow the library to work.</li>
 		<li>Log your browser stats so you can report browser-specific bugs over in the <a href="http://code.google.com/p/reallysimplehistory/issues/list">Google Code issue tracker</a>.</li>
 	</ul>
 	
