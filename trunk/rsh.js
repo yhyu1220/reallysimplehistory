@@ -20,7 +20,69 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 window.dhtmlHistory = {
 	
-	/*public: Initializes our DHTML history. You must call this after the page is finished loading. */
+	/*public: create the DHTML history infrastructure*/
+	create: function(options) {
+
+		/*set user-agent flags*/
+		var UA = navigator.userAgent.toLowerCase();
+		this.isIE = ((document.all != undefined) && UA.indexOf('msie') != -1);
+		this.isOpera = (UA.indexOf('opera') != -1),
+		this.isSafari = (UA.indexOf('safari') != -1),
+
+		/*set up thei historyStorage object; pass in init parameters*/
+		window.historyStorage.setup(options);
+
+		/*execute browser-specific setup methods*/
+		this.createSafari();
+		this.createOpera();
+		
+		/*get our initial location*/
+		var initialHash = this.getCurrentLocation();
+
+		/*save it as our current location*/
+		this.currentLocation = initialHash;
+
+		/*now that we have a hash, create IE-specific code*/
+		this.createIE(initialHash);
+
+		/*Add an unload listener for the page; this is needed for FF 1.5+ because this browser caches all dynamic updates to the
+		page, which can break some of our logic related to testing whether this is the first instance a page has loaded or whether
+		it is being pulled from the cache*/
+		var that = this;
+		window.onunload = function() {
+			that.firstLoad = null;
+		};
+
+		/*determine if this is our first page load; for IE, we do this in this.iframeLoaded(), which is fired on pageload. We do it
+		there because we have no historyStorage at this point, which only exists after the page is finished loading in IE*/
+		if (this.isIE) {
+			/*the iframe will get loaded on page load, and we want to ignore this fact*/
+			this.ignoreLocationChange = true;
+		} else {
+			if (!historyStorage.hasKey(this.PAGELOADEDSTRING)) {
+				this.ignoreLocationChange = true;
+				this.firstLoad = true;
+				historyStorage.put(this.PAGELOADEDSTRING, true);
+			} else {
+				/*indicate that we want to pay attention to this location change*/
+				this.ignoreLocationChange = false;
+				/*For browsers other than IE, fire a history change event; on IE, the event will be thrown automatically when its
+				hidden iframe reloads on page load. Unfortunately, we don't have any listeners yet; indicate that we want to fire
+				an event when a listener is added.*/
+				this.fireOnNewListener = true;
+			}
+		}
+
+		/*other browsers can use a location handler that checks at regular intervals as their primary mechanism; we use it for IE as
+		well to handle an important edge case; see checkLocation() for details*/
+		var that = this;
+		var locationHandler = function() {
+			that.checkLocation();
+		};
+		this.pollHandle = setInterval(locationHandler, 100);
+	},	
+	
+	/*public: Initialize our DHTML history. You must call this after the page is finished loading. */
 	initialize: function() {
 		/*IE needs to be explicitly initialized. IE doesn't autofill form data until the page is finished loading, so we have to wait
 		for onload to fire. */
@@ -159,47 +221,13 @@ window.dhtmlHistory = {
 		);
     },
 	
-	/*public: switch debug mode on and off and toggle associated styles*/
-	setDebugMode: function(newDebugMode) {
-		if (this.debugging != newDebugMode) {
-			/*toggle flag*/
-			this.debugging = newDebugMode;
-			/*now toggle styles*/
-			var styles = (this.debugging
-				? historyStorage.showStyles
-				: historyStorage.hideStyles
-			);
-			styles = styles.split(";");
-			for (var i = 0, j = styles.length; i < j; i++) {
-				var item = styles[i].split(":");
-				var key = item[0];
-				var val = item[1];
-				var formVal = (key == 'border' ? '0' : val);
-				historyStorage.storageForm.style[key] = formVal;
-				historyStorage.storageField.style[key] = val;
-				if (this.isIE) {
-					this.iframe.style[key] = val;
-				}
-				else if (this.isSafari) {
-					val = (key == 'height' ? '30px' : val); 
-					this.safariForm.style[key] = formVal;
-					this.safariStack.style[key] = val;
-					this.safariLength.style[key] = val;
-				}
-			}
-		}
-	},
-	
 	/*- - - - - - - - - - - - */
 	
-	/*private: Key for our own internal history event called when the page is loaded*/
+	/*private: constant for our own internal history event called when the page is loaded*/
 	PAGELOADEDSTRING: "DhtmlHistory_pageLoaded",
 	
 	/*private: milliseconds to wait between add requests - will be reset for certain browsers*/
 	WAIT_TIME: 200,
-	
-	/*private: if true, show various hidden DOM elements for debugging*/
-	debugging: false,
 
 	/*private*/
 	isIE: null,
@@ -257,9 +285,9 @@ window.dhtmlHistory = {
 		/*write out a hidden iframe for IE and set the amount of time to wait between add() requests*/
 		if (this.isIE) {
 			this.WAIT_TIME = 400;/*IE needs longer between history updates*/
-
+			var styles = historyStorage.debugMode ? historyStorage.showStyles : historyStorage.hideStyles;
 			var iframeID = "rshHistoryFrame";
-			var iframeHTML = '<iframe frameborder="0" name="' + iframeID + '" id="' + iframeID + '" style="' + historyStorage.hideStyles
+			var iframeHTML = '<iframe frameborder="0" name="' + iframeID + '" id="' + iframeID + '" style="' + styles
 				+ '" src="blank.html?' + initialHash + '"></iframe>'
 			;
 			document.write(iframeHTML);
@@ -270,7 +298,10 @@ window.dhtmlHistory = {
 	/*private: Create Opera-specific DOM nodes and overrides*/
 	createOpera: function() {
 		if (this.isOpera) {
-			var imgHTML = '<img src="javascript:location.href=\'javascript:dhtmlHistory.checkLocation();\';" style="' + historyStorage.hideStyles + ';visibility:hidden;" />';
+			var styles = historyStorage.debugMode ? historyStorage.showStyles : historyStorage.hideStyles;
+			var imgHTML = '<img src="javascript:location.href=\'javascript:dhtmlHistory.checkLocation();\';" style="' + styles
+				+ ';visibility:hidden;" />'
+			;
 			document.write(imgHTML);
 		}
 	},
@@ -279,12 +310,13 @@ window.dhtmlHistory = {
 	createSafari: function() {
 		if (this.isSafari) {
 			this.WAIT_TIME = 400;
+			var styles = historyStorage.debugMode ? historyStorage.showStyles : historyStorage.hideStyles;
 			var formID = "rshSafariForm";
 			var stackID = "rshSafariStack";
 			var lengthID = "rshSafariLength";
-			var stackHTML = '<form id="' + formID + '" style="' + this.hideStyles + '">'
-				+ '<input type="text" style="' + historyStorage.hideStyles + '" id="' + stackID + '" value="[]"/>'
-				+ '<input type="text" style="' + historyStorage.hideStyles + '" id="' + lengthID + '" value=""/>'
+			var stackHTML = '<form id="' + formID + '" style="' + styles + ';border:0">'
+				+ '<input type="text" style="' + styles + ';height:30px" id="' + stackID + '" value="[]"/>'
+				+ '<input type="text" style="' + styles + ';height:30px" id="' + lengthID + '" value=""/>'
 				+ '</form>'
 			;
 			document.write(stackHTML);
@@ -303,7 +335,7 @@ window.dhtmlHistory = {
 	/*private: safari-only method to read the history stack from a hidden form field*/
 	getSafariStack: function() {
 		var r = this.safariStack.value;
-		return historyStorage.parseJSON(r);
+		return historyStorage.fromJSON(r);
 	},
 
 	/*private: safari-only method to read from the history stack*/
@@ -316,66 +348,7 @@ window.dhtmlHistory = {
 	putSafariState: function(newLocation) {
 	    var stack = this.getSafariStack();
 	    stack[history.length - this.safariHistoryStartPoint] = newLocation;
-	    this.safariStack.value = historyStorage.toJSONString(stack);
-	},
-
-	/*private: create the DHTML history infrastructure*/
-	create: function() {
-
-		/*set user-agent flags*/
-		var UA = navigator.userAgent.toLowerCase();
-		this.isIE = ((document.all != undefined) && UA.indexOf('msie') != -1);
-		this.isOpera = (UA.indexOf('opera') != -1),
-		this.isSafari = (UA.indexOf('safari') != -1),
-		
-		/*execute browser-specific setup methods*/
-		this.createSafari();
-		this.createOpera();
-		
-		/*get our initial location*/
-		var initialHash = this.getCurrentLocation();
-
-		/*save it as our current location*/
-		this.currentLocation = initialHash;
-
-		/*now that we have a hash, create IE-specific code*/
-		this.createIE(initialHash);
-
-		/*Add an unload listener for the page; this is needed for FF 1.5+ because this browser caches all dynamic updates to the
-		page, which can break some of our logic related to testing whether this is the first instance a page has loaded or whether
-		it is being pulled from the cache*/
-		var that = this;
-		window.onunload = function() {
-			that.firstLoad = null;
-		};
-
-		/*determine if this is our first page load; for IE, we do this in this.iframeLoaded(), which is fired on pageload. We do it
-		there because we have no historyStorage at this point, which only exists after the page is finished loading in IE*/
-		if (this.isIE) {
-			/*the iframe will get loaded on page load, and we want to ignore this fact*/
-			this.ignoreLocationChange = true;
-		} else {
-			if (!historyStorage.hasKey(this.PAGELOADEDSTRING)) {
-				this.ignoreLocationChange = true;
-				this.firstLoad = true;
-				historyStorage.put(this.PAGELOADEDSTRING, true);
-			} else {
-				/*indicate that we want to pay attention to this location change*/
-				this.ignoreLocationChange = false;
-				/*For browsers other than IE, fire a history change event; on IE, the event will be thrown automatically when its
-				hidden iframe reloads on page load. Unfortunately, we don't have any listeners yet; indicate that we want to fire
-				an event when a listener is added.*/
-				this.fireOnNewListener = true;
-			}
-		}
-
-		/*other browsers can use a location handler that checks at regular intervals as their primary mechanism; we use it for IE as
-		well to handle an important edge case; see checkLocation() for details*/
-		var that = this;
-		var locationHandler = function() {
-			that.checkLocation();
-		};
-		this.pollHandle = setInterval(locationHandler, 100);
+	    this.safariStack.value = historyStorage.toJSON(stack);
 	},
 
 	/*private: Notify the listener of new history changes. */
@@ -548,7 +521,7 @@ window.historyStorage = {
 		this.assertValidKey(key);
 		/*make sure the hash table has been loaded from the form*/
 		this.loadHashTable();
-		return (typeof this.storageHash[key] != "undefined");
+		return (typeof this.storageHash[key] != 'undefined');
 	},
 
 	/*public*/
@@ -565,6 +538,9 @@ window.historyStorage = {
 
 	hideStyles: 'left:-1000px;top:-1000px;width:1px;height:1px;border:0;position:absolute',
 	
+	/*public - debug mode flag*/
+	debugMode: false,
+	
 	/*- - - - - - - - - - - - */
 
 	/*private: Our hash of key name/values. */
@@ -577,12 +553,28 @@ window.historyStorage = {
 	storageForm: null,
 	storageField: null,
 
-	/*private: write a hidden form and textarea into the page*/
-	setup: function() {
+	/*private: set up our historyStorage object for use by dhtmlHistory*/
+	setup: function(options) {
+		
+		/*process init parameters*/
+		if (typeof options != 'undefined') {
+			if (options.debugMode) {
+				this.debugMode = true;
+			}
+			if (options.toJSON) {
+				this.toJSON = options.toJSON;
+			}
+			if (options.fromJSON) {
+				this.fromJSON = options.fromJSON;
+			}
+		}		
+		
+		/*write a hidden form and textarea into the page; we'll stow our history stack here*/
+		var styles = this.debugMode ? historyStorage.showStyles : historyStorage.hideStyles;
 		var formID = "rshStorageForm";
 		var textareaID = "rshStorageField";
-		var textareaHTML = '<form id="' + formID + '" style="' + this.hideStyles + '">'
-			+ '<textarea id="' + textareaID + '" style="' + this.hideStyles + '"></textarea>'
+		var textareaHTML = '<form id="' + formID + '" style="' + styles + ';border:0">'
+			+ '<textarea id="' + textareaID + '" style="' + styles + '"></textarea>'
 			+ '</form>'
 		;
 		document.write(textareaHTML);
@@ -604,7 +596,7 @@ window.historyStorage = {
 		if (!this.hashLoaded) {	
 			var serializedHashTable = this.storageField.value;
 			if (serializedHashTable != "" && serializedHashTable != null) {
-				this.storageHash = this.parseJSON(serializedHashTable);
+				this.storageHash = this.fromJSON(serializedHashTable);
 				this.hashLoaded = true;/*TODO BD: figure out whether moving this was a good idea; also how to optimize timing and number off calls to this method*/
 			}
 		}
@@ -612,44 +604,14 @@ window.historyStorage = {
 	/*private: Saves the hash table into the form. */
 	saveHashTable: function() {
 		this.loadHashTable();
-		var serializedHashTable = this.toJSONString(this.storageHash);
+		var serializedHashTable = this.toJSON(this.storageHash);
 		this.storageField.value = serializedHashTable;
 	},
-	/*private: A bridge for our toJSONString implementation. */
-	toJSONString: function(o) {
-		if (typeof JSON != 'undefined' && JSON.stringify) {
-			return JSON.stringify(o);/*2005 JSON lib*/
-		}
-		else if (o.toJSONString) {
-			return o.toJSONString();/*2007 JSON lib*/
-		}
-		else if (Object.toJSON) {
-			return Object.toJSON(o);/*Prototype*/
-		}
-		else {
-			var e = "No JSON stringify method defined."
-			throw e;
-		}
+	/*private: bridges for our toJSON and fromJSON implementations - both rely on 2007 JSON.org library - can be overridden by options bundle */
+	toJSON: function(o) {
+		return o.toJSONString();
 	},
-	/*private: A bridge for our parseJSON implementation. */
-	parseJSON: function(s) {
-		if (typeof JSON != 'undefined'  && JSON.parse) {
-			return JSON.parse(s);/*2005 JSON lib*/
-		}
-		else if (s.parseJSON) {
-			return s.parseJSON();/*2007 JSON lib*/
-		}
-		else if (s.evalJSON) {
-			return s.evalJSON();/*Prototype*/
-		}
-		else {
-			var e = "No JSON parse method defined."
-			throw e;
-		}
+	fromJSON: function(s) {
+		return s.parseJSON();
 	}
 };
-
-/*instantiate our objects*/
-window.historyStorage.setup();
-window.dhtmlHistory.create();
-
