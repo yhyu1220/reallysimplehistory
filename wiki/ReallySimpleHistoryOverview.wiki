@@ -39,7 +39,7 @@ Brad Neuberg's original 0.4 version from 2005 is still the latest public release
   * [http://quickstarts.asp.net/Futures/ajax/doc/history.aspx  ASP.NET Futures (July 2007): Managing Browser History and Back Button Support in ASP.NET AJAX]
   * [http://www.contentwithstyle.co.uk/Articles/38/fixing-the-back-button-and-enabling-bookmarking-for-ajax-apps Content With Style: Fixing the Back Button and Enabling Bookmarking for AJAX Apps]
   * [http://www.streampad.com/blog/?p=110 Back button now in use! (Getting history working in Safari)]
-
+  * [http://www.isolani.co.uk/blog/javascript/FixingTheBackButtonThatAjaxBroke Fixing the back button that AJAX broke]
  
  
  
