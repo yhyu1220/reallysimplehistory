@@ -14,9 +14,9 @@ For up-to-the-minute revisions, visit the SVN repo. RSH is now (finally) version
 
 == New features and change log==
 
-  * Added support for IE7 (see "Known issue" list below)
-  * Added support for Opera/Mac and Opera/Win (see "Known issue" list below) using Bertrand Le Roy's image method (see "Interesting links" section below)
-  * Added support for Safari 2/Mac (see "Known issue" list below) using Bertrand Le Roy's hidden text-field method
+  * Added support for IE7
+  * Added support for Opera/Mac and Opera/Win
+  * Added support for Safari 2/Mac
   * Modernized the JSON parser and moved it to a separate file
   * Provided bridge methods for JSON calls to make it easier to swap out JSON parsers
   * Rebuilt original test pages into a single test page that allows you to peek behind the scenes at hidden, hacked-in DOM elements
