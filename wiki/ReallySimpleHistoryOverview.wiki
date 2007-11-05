@@ -36,6 +36,7 @@ Brad Neuberg's original 0.4 version from 2005 is still the latest public release
   * [http://www.hostingforum.ca/706287-navigator-useragent-required-set-location-href-safari.html navigator.userAgent required to set location.href in Safari?]
   * [http://groups.google.com/group/Google-Web-Toolkit-Contributors/browse_thread/thread/7e886a8a7070df97/06e24bcef7e2f2ad Safari 2, RichText, Browser History, and My Sanity - Google Web Toolkit Contributors | Google Groups]
   * [http://cvs.horde.org/dimp/js/src/dhtmlHistory.js SVN home for a Prototype-based offshoot of RSH 0.4]
+  * [http://quickstarts.asp.net/Futures/ajax/doc/history.aspx  ASP.NET Futures (July 2007): Managing Browser History and Back Button Support in ASP.NET AJAX]
 
  
  
