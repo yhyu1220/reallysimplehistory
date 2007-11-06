@@ -33,7 +33,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 <script type="text/javascript">
 /*instantiate our history object*/
 window.dhtmlHistory.create({
-	debugMode: true
+	debugMode: true 
 	//, toJSON: function(o) {
 		//return JSON.stringify(o);/*2005 JSON lib*/
 		//return Object.toJSON(o);/*Prototype*/
@@ -46,8 +46,8 @@ window.dhtmlHistory.create({
 </script>
 
 <script type="text/javascript">
+
 window.onload = function() {
-	
 	//initialize our DHTML history
 	dhtmlHistory.initialize();
 	log("<b>dhtmlHistory initialized</b>");
@@ -55,7 +55,6 @@ window.onload = function() {
 	//subscribe to DHTML history change events
 	dhtmlHistory.addListener(historyChange);
 	log("<b>dhtmlHistory listener created</b>");
-	
 };
 
 /*basic DHTML logging for our test page*/
@@ -76,6 +75,7 @@ function printBrowserInfo() {
 	log("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;navigator.appVersion: " + navigator.appVersion);
 	log("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;navigator.userAgent: " + navigator.userAgent);
 	log("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;navigator.platform: " + navigator.platform);
+	log("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;navigator.vendor: " + navigator.vendor);
 	log("<b>End browser dump</b>");
 }
 
@@ -250,7 +250,7 @@ function viewObjectState() {
 	log("<b>Dumping dhtmlHistory object state</b>");
 	for (var key in dhtmlHistory) {
 		var val = dhtmlHistory[key];
-		if (typeof val != 'function' && typeof val != 'object') {
+		if (typeof val !== 'function' && (typeof val !== 'object' || val === null)) {
 			log("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>" + key + "</b>: " + dhtmlHistory[key]);
 		}
 	}
