@@ -20,21 +20,49 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 window.dhtmlHistory = {
 	
+	/*public: user-agent booleans*/
+	isIE: null,
+	isOpera: null,
+	isSafari: null,
+	isKonquerer: null,
+	isGecko: null,
+	isSupported: null,
+	
 	/*public: create the DHTML history infrastructure*/
 	create: function(options) {
 
+		var that = this;
+
 		/*set user-agent flags*/
 		var UA = navigator.userAgent.toLowerCase();
-		this.isIE = ((document.all != undefined) && UA.indexOf('msie') != -1);
-		this.isOpera = (UA.indexOf('opera') != -1),
-		this.isSafari = (UA.indexOf('safari') != -1),
+		var platform = navigator.platform.toLowerCase();
+		var vendor = navigator.vendor || "";
+		if (vendor === "KDE") {
+			this.isKonqueror = true;
+			this.isSupported = false;
+		} else if (typeof window.opera !== "undefined") {
+			this.isOpera = true;
+			this.isSupported = true;
+		} else if (typeof document.all !== "undefined") {
+			this.isIE = true;
+			this.isSupported = true;
+		} else if (vendor.indexOf("Apple Computer, Inc.") != -1) {
+			this.isSafari = true;
+			this.isSupported = (platform.indexOf("mac") != -1);
+		} else if (UA.indexOf("gecko") != -1) {
+			this.isGecko = true;
+			this.isSupported = true;
+		}
 
 		/*set up thei historyStorage object; pass in init parameters*/
-		window.historyStorage.setup(options);
+		window.historyStorage.setup(this.isOpera,options);
 
 		/*execute browser-specific setup methods*/
-		this.createSafari();
-		this.createOpera();
+		if (this.isSafari) {
+			this.createSafari();
+		} else if (this.isOpera) {
+			this.createOpera();
+		}
 		
 		/*get our initial location*/
 		var initialHash = this.getCurrentLocation();
@@ -43,12 +71,13 @@ window.dhtmlHistory = {
 		this.currentLocation = initialHash;
 
 		/*now that we have a hash, create IE-specific code*/
-		this.createIE(initialHash);
+		if (this.isIE) {
+			this.createIE(initialHash);
+		}
 
 		/*Add an unload listener for the page; this is needed for FF 1.5+ because this browser caches all dynamic updates to the
 		page, which can break some of our logic related to testing whether this is the first instance a page has loaded or whether
 		it is being pulled from the cache*/
-		var that = this;
 		window.onunload = function() {
 			that.firstLoad = null;
 		};
@@ -75,11 +104,10 @@ window.dhtmlHistory = {
 
 		/*other browsers can use a location handler that checks at regular intervals as their primary mechanism; we use it for IE as
 		well to handle an important edge case; see checkLocation() for details*/
-		var that = this;
 		var locationHandler = function() {
 			that.checkLocation();
 		};
-		this.pollHandle = setInterval(locationHandler, 100);
+		setInterval(locationHandler, 100);
 	},	
 	
 	/*public: Initialize our DHTML history. You must call this after the page is finished loading. */
@@ -142,7 +170,7 @@ window.dhtmlHistory = {
 
 				/*indicate that the current wait time is now less*/
 				if (that.currentWaitTime > 0) {
-					that.currentWaitTime = that.currentWaitTime - that.WAIT_TIME;
+					that.currentWaitTime = that.currentWaitTime - that.waitTime;
 				}
 			
 				/*remove any leading hash symbols on newLocation*/
@@ -186,7 +214,7 @@ window.dhtmlHistory = {
 			window.setTimeout(addImpl, this.currentWaitTime);
 
 			/*indicate that the next request will have to wait for awhile*/
-			this.currentWaitTime = this.currentWaitTime + this.WAIT_TIME;
+			this.currentWaitTime = this.currentWaitTime + this.waitTime;
 		}
 	},
 
@@ -226,23 +254,11 @@ window.dhtmlHistory = {
 	/*private: constant for our own internal history event called when the page is loaded*/
 	PAGELOADEDSTRING: "DhtmlHistory_pageLoaded",
 	
-	/*private: milliseconds to wait between add requests - will be reset for certain browsers*/
-	WAIT_TIME: 200,
-
-	/*private*/
-	isIE: null,
-	
-	/*private*/
-	isOpera: null,
-
-	/*private*/
-	isSafari: null,
-	
 	/*private: Our history change listener. */
 	listener: null,
 
-	/*private: setInterval handle for our history polling */
-	pollHandle: null,
+	/*private: milliseconds to wait between add requests - will be reset for certain browsers*/
+	waitTime: 200,
 	
 	/*private: milliseconds before an add request can execute */
 	currentWaitTime: 0,
@@ -255,7 +271,6 @@ window.dhtmlHistory = {
 
 	/*private: Used only by Safari*/
 	safariHistoryStartPoint: null,
-	safariForm: null,
 	safariStack: null,
 	safariLength: null,
 
@@ -283,52 +298,46 @@ window.dhtmlHistory = {
 	/*private: Create IE-specific DOM nodes and overrides*/
 	createIE: function(initialHash) {
 		/*write out a hidden iframe for IE and set the amount of time to wait between add() requests*/
-		if (this.isIE) {
-			this.WAIT_TIME = 400;/*IE needs longer between history updates*/
-			var styles = historyStorage.debugMode ? historyStorage.showStyles : historyStorage.hideStyles;
-			var iframeID = "rshHistoryFrame";
-			var iframeHTML = '<iframe frameborder="0" name="' + iframeID + '" id="' + iframeID + '" style="' + styles
-				+ '" src="blank.html?' + initialHash + '"></iframe>'
-			;
-			document.write(iframeHTML);
-			this.iframe = document.getElementById(iframeID);
-		}
+		this.waitTime = 400;/*IE needs longer between history updates*/
+		var styles = (historyStorage.debugMode
+			? 'width: 800px;height:80px;border:1px solid black;'
+			: historyStorage.hideStyles
+		);
+		var iframeID = "rshHistoryFrame";
+		var iframeHTML = '<iframe frameborder="0" id="' + iframeID + '" style="' + styles + '" src="blank.html?' + initialHash + '"></iframe>';
+		document.write(iframeHTML);
+		this.iframe = document.getElementById(iframeID);
 	},
 	
 	/*private: Create Opera-specific DOM nodes and overrides*/
 	createOpera: function() {
-		if (this.isOpera) {
-			var styles = historyStorage.debugMode ? historyStorage.showStyles : historyStorage.hideStyles;
-			var imgHTML = '<img src="javascript:location.href=\'javascript:dhtmlHistory.checkLocation();\';" style="' + styles
-				+ ';visibility:hidden;" />'
-			;
-			document.write(imgHTML);
-		}
+		var imgHTML = '<img src="javascript:location.href=\'javascript:dhtmlHistory.checkLocation();\';" style="' + historyStorage.hideStyles + '" />';
+		document.write(imgHTML);
 	},
 	
 	/*private: Create Safari-specific DOM nodes and overrides*/
 	createSafari: function() {
-		if (this.isSafari) {
-			this.WAIT_TIME = 400;
-			var styles = historyStorage.debugMode ? historyStorage.showStyles : historyStorage.hideStyles;
-			var formID = "rshSafariForm";
-			var stackID = "rshSafariStack";
-			var lengthID = "rshSafariLength";
-			var stackHTML = '<form id="' + formID + '" style="' + styles + ';border:0">'
-				+ '<input type="text" style="' + styles + ';height:30px" id="' + stackID + '" value="[]"/>'
-				+ '<input type="text" style="' + styles + ';height:30px" id="' + lengthID + '" value=""/>'
-				+ '</form>'
-			;
-			document.write(stackHTML);
-			this.safariForm = document.getElementById(formID);
-			this.safariStack = document.getElementById(stackID);
-			this.safariLength = document.getElementById(lengthID);
-			if (!historyStorage.hasKey(this.PAGELOADEDSTRING)) {
-				this.safariHistoryStartPoint = history.length;
-				this.safariLength.value = this.safariHistoryStartPoint;
-			} else {
-				this.safariHistoryStartPoint = this.safariLength.value;
-			}
+		this.waitTime = 400;
+		var formID = "rshSafariForm";
+		var stackID = "rshSafariStack";
+		var lengthID = "rshSafariLength";
+		var formStyles = historyStorage.debugMode ? historyStorage.showStyles : historyStorage.hideStyles;
+		var inputStyles = (historyStorage.debugMode
+			? 'width:800px;height:20px;border:1px solid black;margin:0;padding:0;'
+			: historyStorage.hideStyles
+		);
+		var safariHTML = '<form id="' + formID + '" style="' + formStyles + '">'
+			+ '<input type="text" style="' + inputStyles + '" id="' + stackID + '" value="[]"/>'/*TODO BD: should "[]" really go here?*/
+			+ '<input type="text" style="' + inputStyles + '" id="' + lengthID + '" value=""/>'
+		+ '</form>';
+		document.write(safariHTML);
+		this.safariStack = document.getElementById(stackID);
+		this.safariLength = document.getElementById(lengthID);
+		if (!historyStorage.hasKey(this.PAGELOADEDSTRING)) {
+			this.safariHistoryStartPoint = history.length;/*TODO BD: should we even save this as an object property or just stow in the input?*/
+			this.safariLength.value = this.safariHistoryStartPoint;
+		} else {
+			this.safariHistoryStartPoint = this.safariLength.value;
 		}
 	},
 	
@@ -421,10 +430,10 @@ window.dhtmlHistory = {
 	/*private: Removes any leading hash that might be on a location. */
 	removeHash: function(hashValue) {
 		var r;
-		if (hashValue == null || hashValue == undefined) {
+		if (hashValue === null || hashValue === undefined) {
 			r = null;
 		}
-		else if (hashValue == "") {
+		else if (hashValue === "") {
 			r = "";
 		}
 		else if (hashValue.length == 1 && hashValue.charAt(0) == "#") {
@@ -457,7 +466,7 @@ window.dhtmlHistory = {
 		}
 
 		/*move to this location in the browser location bar if we are not dealing with a page load event*/
-		if (this.pageLoadEvent != true) {
+		if (this.pageLoadEvent !== true) {
 			window.location.hash = hash;
 		}
 
@@ -492,10 +501,9 @@ window.historyStorage = {
 		/*make sure the hash table has been loaded from the form*/
 		this.loadHashTable();
 		var value = this.storageHash[key];
-		value = (value == undefined
-			? null
-			: value
-		);
+		if (value === undefined) {
+			value = null;
+		}
 		return value;
 	},
 
@@ -521,22 +529,21 @@ window.historyStorage = {
 		this.assertValidKey(key);
 		/*make sure the hash table has been loaded from the form*/
 		this.loadHashTable();
-		return (typeof this.storageHash[key] != 'undefined');
+		return (typeof this.storageHash[key] !== "undefined");
 	},
 
 	/*public*/
 	isValidKey: function(key) {
-		var r = (key == undefined
+		var r = (key === undefined
 			? false
-			: typeof key == "string"
+			: typeof key === "string"
 		);
 		return r;
 	},
 	
 	/*public - CSS strings utilized by both objects to hide or show behind-the-scenes DOM elements*/
-	showStyles: 'left:auto;top:auto;width:800px;height:100px;border:1px solid black;position:static',
-
-	hideStyles: 'left:-1000px;top:-1000px;width:1px;height:1px;border:0;position:absolute',
+	showStyles: 'border:0;margin:0;padding:0;',
+	hideStyles: 'left: -1000px;top:-1000px;width:1px;height:1px;border:0;position:absolute;',
 	
 	/*public - debug mode flag*/
 	debugMode: false,
@@ -549,17 +556,16 @@ window.historyStorage = {
 	/*private: If true, we have loaded our hash table out of the storage form. */
 	hashLoaded: false, 
 
-	/*private: References to our history field and its surrounding form */
-	storageForm: null,
+	/*private: DOM reference to our history field */
 	storageField: null,
 
 	/*private: set up our historyStorage object for use by dhtmlHistory*/
-	setup: function(options) {
+	setup: function(isOpera,options) {
 		
 		/*process init parameters*/
-		if (typeof options != 'undefined') {
+		if (typeof options !== "undefined") {
 			if (options.debugMode) {
-				this.debugMode = true;
+				this.debugMode = options.debugMode;
 			}
 			if (options.toJSON) {
 				this.toJSON = options.toJSON;
@@ -570,17 +576,22 @@ window.historyStorage = {
 		}		
 		
 		/*write a hidden form and textarea into the page; we'll stow our history stack here*/
-		var styles = this.debugMode ? historyStorage.showStyles : historyStorage.hideStyles;
 		var formID = "rshStorageForm";
 		var textareaID = "rshStorageField";
-		var textareaHTML = '<form id="' + formID + '" style="' + styles + ';border:0">'
-			+ '<textarea id="' + textareaID + '" style="' + styles + '"></textarea>'
-			+ '</form>'
-		;
+		var formStyles = this.debugMode ? historyStorage.showStyles : historyStorage.hideStyles;
+		var textareaStyles = (historyStorage.debugMode
+			? 'width: 800px;height:80px;border:1px solid black;'
+			: historyStorage.hideStyles
+		);
+		var textareaHTML = '<form id="' + formID + '" style="' + formStyles + '">'
+			+ '<textarea id="' + textareaID + '" style="' + textareaStyles + '"></textarea>'
+		+ '</form>';
 		document.write(textareaHTML);
-		this.storageForm = document.getElementById(formID);
 		this.storageField = document.getElementById(textareaID);
-		this.storageField.focus();
+		if (isOpera) {
+			this.storageField.focus();
+			this.storageField.blur();
+		}
 	},
 
 	/*private: Asserts that a key is valid, throwing an exception if it is not. */
@@ -595,7 +606,7 @@ window.historyStorage = {
 	loadHashTable: function() {
 		if (!this.hashLoaded) {	
 			var serializedHashTable = this.storageField.value;
-			if (serializedHashTable != "" && serializedHashTable != null) {
+			if (serializedHashTable !== "" && serializedHashTable !== null) {
 				this.storageHash = this.fromJSON(serializedHashTable);
 				this.hashLoaded = true;/*TODO BD: figure out whether moving this was a good idea; also how to optimize timing and number off calls to this method*/
 			}
