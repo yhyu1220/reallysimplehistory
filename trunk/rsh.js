@@ -183,7 +183,7 @@ window.dhtmlHistory = {
 					var e = "Exception: History locations can not have the same value as _any_ IDs that might be in the document,"
 					+ " due to a bug in IE; please ask the developer to choose a history location that does not match any HTML"
 					+ " IDs in this document. The following ID is already taken and cannot be a location: " + newLocation;
-					throw e; 
+					throw new Error(e); 
 				}
 
 				/*store the history data into history storage*/
@@ -334,7 +334,7 @@ window.dhtmlHistory = {
 		this.safariStack = document.getElementById(stackID);
 		this.safariLength = document.getElementById(lengthID);
 		if (!historyStorage.hasKey(this.PAGELOADEDSTRING)) {
-			this.safariHistoryStartPoint = history.length;/*TODO BD: should we even save this as an object property or just stow in the input?*/
+			this.safariHistoryStartPoint = history.length;
 			this.safariLength.value = this.safariHistoryStartPoint;
 		} else {
 			this.safariHistoryStartPoint = this.safariLength.value;
@@ -590,15 +590,14 @@ window.historyStorage = {
 		this.storageField = document.getElementById(textareaID);
 		if (isOpera) {
 			this.storageField.focus();
-			this.storageField.blur();
 		}
 	},
 
 	/*private: Asserts that a key is valid, throwing an exception if it is not. */
 	assertValidKey: function(key) {
-		if (!this.isValidKey(key)) {/*TODO BD figure out whether this is safe in safari and if so uncomment it*/
-			//var e = "Please provide a valid key for window.historyStorage, key= " + key;
-			//throw e;
+		if (!this.isValidKey(key)) {
+			var e = "Please provide a valid key for window.historyStorage. Invalid key = " + key + ".";
+			throw new Error(e);
 		}
 	},
 
@@ -608,7 +607,7 @@ window.historyStorage = {
 			var serializedHashTable = this.storageField.value;
 			if (serializedHashTable !== "" && serializedHashTable !== null) {
 				this.storageHash = this.fromJSON(serializedHashTable);
-				this.hashLoaded = true;/*TODO BD: figure out whether moving this was a good idea; also how to optimize timing and number off calls to this method*/
+				this.hashLoaded = true;/*TODO BD: figure out whether moving this was a good idea; also how to optimize timing and number of calls to this method*/
 			}
 		}
 	},
