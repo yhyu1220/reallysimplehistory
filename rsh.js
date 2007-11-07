@@ -78,9 +78,12 @@ window.dhtmlHistory = {
 		/*Add an unload listener for the page; this is needed for FF 1.5+ because this browser caches all dynamic updates to the
 		page, which can break some of our logic related to testing whether this is the first instance a page has loaded or whether
 		it is being pulled from the cache*/
-		window.onunload = function() {
+
+		var unloadHandler = function() {
 			that.firstLoad = null;
 		};
+		
+		this.addEventListener(window,'unload',unloadHandler);		
 
 		/*determine if this is our first page load; for IE, we do this in this.iframeLoaded(), which is fired on pageload. We do it
 		there because we have no historyStorage at this point, which only exists after the page is finished loading in IE*/
@@ -137,6 +140,17 @@ window.dhtmlHistory = {
 		if (this.fireOnNewListener) {
 			this.fireHistoryEvent(this.currentLocation);
 			this.fireOnNewListener = false;
+		}
+	},
+	
+	/*public: generic utility function for attaching events*/
+	addEventListener: function(o,e,l) {
+		if (o.addEventListener) {
+			o.addEventListener(e,l,false);
+		} else if (o.attachEvent) {
+			o.attachEvent('on'+e,function() {
+				l(window.event);
+			});
 		}
 	},
 	
@@ -481,7 +495,7 @@ fact that browsers save the text in form data for the life of the browser and ca
 the user navigates back to the page.*/
 
 window.historyStorage = {
-
+	
 	/*public*/
 	put: function(key, value) {
 		this.assertValidKey(key);
