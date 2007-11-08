@@ -16,19 +16,19 @@ FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TOR
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-/*An object that provides history, history data, and bookmarking for DHTML and Ajax applications. */
+/*An object that provides history, history data, and bookmarking for DHTML and Ajax applications.*/
 
 window.dhtmlHistory = {
 	
-	/*public: user-agent booleans*/
-	isIE: null,
-	isOpera: null,
-	isSafari: null,
-	isKonquerer: null,
-	isGecko: null,
-	isSupported: null,
+	/*Public: User-agent booleans*/
+	isIE: false,
+	isOpera: false,
+	isSafari: false,
+	isKonquerer: false,
+	isGecko: false,
+	isSupported: false,
 	
-	/*public: create the DHTML history infrastructure*/
+	/*Public: Create the DHTML history infrastructure*/
 	create: function(options) {
 
 		var that = this;
@@ -46,31 +46,31 @@ window.dhtmlHistory = {
 		} else if (typeof document.all !== "undefined") {
 			this.isIE = true;
 			this.isSupported = true;
-		} else if (vendor.indexOf("Apple Computer, Inc.") != -1) {
+		} else if (vendor.indexOf("Apple Computer, Inc.") > -1) {
 			this.isSafari = true;
-			this.isSupported = (platform.indexOf("mac") != -1);
+			this.isSupported = (platform.indexOf("mac") > -1);
 		} else if (UA.indexOf("gecko") != -1) {
 			this.isGecko = true;
 			this.isSupported = true;
 		}
 
-		/*set up thei historyStorage object; pass in init parameters*/
+		/*Set up the historyStorage object; pass in init parameters*/
 		window.historyStorage.setup(this.isOpera,options);
 
-		/*execute browser-specific setup methods*/
+		/*Execute browser-specific setup methods*/
 		if (this.isSafari) {
 			this.createSafari();
 		} else if (this.isOpera) {
 			this.createOpera();
 		}
 		
-		/*get our initial location*/
+		/*Get our initial location*/
 		var initialHash = this.getCurrentLocation();
 
-		/*save it as our current location*/
+		/*Save it as our current location*/
 		this.currentLocation = initialHash;
 
-		/*now that we have a hash, create IE-specific code*/
+		/*Now that we have a hash, create IE-specific code*/
 		if (this.isIE) {
 			this.createIE(initialHash);
 		}
@@ -85,18 +85,19 @@ window.dhtmlHistory = {
 		
 		this.addEventListener(window,'unload',unloadHandler);		
 
-		/*determine if this is our first page load; for IE, we do this in this.iframeLoaded(), which is fired on pageload. We do it
+		/*Determine if this is our first page load; for IE, we do this in this.iframeLoaded(), which is fired on pageload. We do it
 		there because we have no historyStorage at this point, which only exists after the page is finished loading in IE*/
 		if (this.isIE) {
-			/*the iframe will get loaded on page load, and we want to ignore this fact*/
+			/*The iframe will get loaded on page load, and we want to ignore this fact*/
 			this.ignoreLocationChange = true;
 		} else {
 			if (!historyStorage.hasKey(this.PAGELOADEDSTRING)) {
+				/*This is our first page load, so ignore the location change and add our special history entry*/
 				this.ignoreLocationChange = true;
 				this.firstLoad = true;
 				historyStorage.put(this.PAGELOADEDSTRING, true);
 			} else {
-				/*indicate that we want to pay attention to this location change*/
+				/*This isn't our first page load, so indicate that we want to pay attention to this location change*/
 				this.ignoreLocationChange = false;
 				/*For browsers other than IE, fire a history change event; on IE, the event will be thrown automatically when its
 				hidden iframe reloads on page load. Unfortunately, we don't have any listeners yet; indicate that we want to fire
@@ -105,7 +106,7 @@ window.dhtmlHistory = {
 			}
 		}
 
-		/*other browsers can use a location handler that checks at regular intervals as their primary mechanism; we use it for IE as
+		/*Other browsers can use a location handler that checks at regular intervals as their primary mechanism; we use it for IE as
 		well to handle an important edge case; see checkLocation() for details*/
 		var locationHandler = function() {
 			that.checkLocation();
@@ -113,19 +114,18 @@ window.dhtmlHistory = {
 		setInterval(locationHandler, 100);
 	},	
 	
-	/*public: Initialize our DHTML history. You must call this after the page is finished loading. */
+	/*Public: Initialize our DHTML history. You must call this after the page is finished loading.*/
 	initialize: function() {
-		/*IE needs to be explicitly initialized. IE doesn't autofill form data until the page is finished loading, so we have to wait
-		for onload to fire. */
+		/*IE needs to be explicitly initialized. IE doesn't autofill form data until the page is finished loading, so we have to wait*/
 		if (this.isIE) {
-			/*if this is the first time this page has loaded*/
+			/*If this is the first time this page has loaded*/
 			if (!historyStorage.hasKey(this.PAGELOADEDSTRING)) {
 				/*For IE, we do this in initialize(); for other browsers, we do it in create()*/
 				this.fireOnNewListener = false;
 				this.firstLoad = true;
 				historyStorage.put(this.PAGELOADEDSTRING, true);
 			}
-			/*else if this is a fake onload event*/
+			/*Else if this is a fake onload event*/
 			else {
 				this.fireOnNewListener = true;
 				this.firstLoad = false;   
@@ -133,17 +133,17 @@ window.dhtmlHistory = {
 		}
 	},
 
-	/*public: Adds a history change listener. Note that only one listener is supported at this time. */
+	/*Public: Adds a history change listener. Note that only one listener is supported at this time.*/
 	addListener: function(listener) {
 		this.listener = listener;
-		/*if the page was just loaded and we should not ignore it, fire an event to our new listener now*/
+		/*If the page was just loaded and we should not ignore it, fire an event to our new listener now*/
 		if (this.fireOnNewListener) {
 			this.fireHistoryEvent(this.currentLocation);
 			this.fireOnNewListener = false;
 		}
 	},
 	
-	/*public: generic utility function for attaching events*/
+	/*Public: Generic utility function for attaching events*/
 	addEventListener: function(o,e,l) {
 		if (o.addEventListener) {
 			o.addEventListener(e,l,false);
@@ -154,97 +154,97 @@ window.dhtmlHistory = {
 		}
 	},
 	
-	/*public*/
+	/*Public: Add a history point.*/
 	add: function(newLocation, historyData) {
+		
 		if (this.isSafari) {
 			
-			/*remove any leading hash symbols on newLocation*/
+			/*Remove any leading hash symbols on newLocation*/
 			newLocation = this.removeHash(newLocation);
 
-			/*store the history data into history storage*/
+			/*Store the history data into history storage*/
 			historyStorage.put(newLocation, historyData);
 
-			/*save this as our current location*/
+			/*Save this as our current location*/
 			this.currentLocation = newLocation;
 	
-			/*change the browser location*/
+			/*Change the browser location*/
 			window.location.hash = newLocation;
 		
-			/*save this to the safari form field*/
+			/*Save this to the Safari form field*/
 			this.putSafariState(newLocation);
 
 		} else {
 			
 			/*Most browsers require that we wait a certain amount of time before changing the location, such
-			as 200 milliseconds; rather than forcing external callers to use window.setTimeout to account for
-			this to prevent bugs, we internally handle this detail by using a 'currentWaitTime' variable and
-			have requests wait in line */
+			as 200 MS; rather than forcing external callers to use window.setTimeout to account for this,
+			we internally handle it by putting requests in a queue.*/
 			var that = this;
 			var addImpl = function() {
 
-				/*indicate that the current wait time is now less*/
+				/*Indicate that the current wait time is now less*/
 				if (that.currentWaitTime > 0) {
 					that.currentWaitTime = that.currentWaitTime - that.waitTime;
 				}
 			
-				/*remove any leading hash symbols on newLocation*/
+				/*Remove any leading hash symbols on newLocation*/
 				newLocation = that.removeHash(newLocation);
 
 				/*IE has a strange bug; if the newLocation is the same as _any_ preexisting id in the
 				document, then the history action gets recorded twice; throw a programmer exception if
 				there is an element with this ID*/
-				if (document.getElementById(newLocation)) {
+				if (document.getElementById(newLocation) && that.debugMode) {
 					var e = "Exception: History locations can not have the same value as _any_ IDs that might be in the document,"
 					+ " due to a bug in IE; please ask the developer to choose a history location that does not match any HTML"
 					+ " IDs in this document. The following ID is already taken and cannot be a location: " + newLocation;
 					throw new Error(e); 
 				}
 
-				/*store the history data into history storage*/
+				/*Store the history data into history storage*/
 				historyStorage.put(newLocation, historyData);
 
-				/*indicate to the browser to ignore this upcomming location change*/
+				/*Indicate to the browser to ignore this upcomming location change since we're making it programmatically*/
 				that.ignoreLocationChange = true;
 
-				/*indicate to IE that this is an atomic location change block*/
+				/*Indicate to IE that this is an atomic location change block*/
 				that.ieAtomicLocationChange = true;
 
-				/*save this as our current location*/
+				/*Save this as our current location*/
 				that.currentLocation = newLocation;
 		
-				/*change the browser location*/
+				/*Change the browser location*/
 				window.location.hash = newLocation;
 
-				/*change the hidden iframe's location if on IE*/
+				/*Change the hidden iframe's location if on IE*/
 				if (that.isIE) {
 					that.iframe.src = "blank.html?" + newLocation;
 				}
 
-				/*end of atomic location change block for IE*/
+				/*End of atomic location change block for IE*/
 				that.ieAtomicLocationChange = false;
 			};
 
-			/*now queue up this add request*/
+			/*Now queue up this add request*/
 			window.setTimeout(addImpl, this.currentWaitTime);
 
-			/*indicate that the next request will have to wait for awhile*/
+			/*Indicate that the next request will have to wait for awhile*/
 			this.currentWaitTime = this.currentWaitTime + this.waitTime;
 		}
 	},
 
-	/*public*/
+	/*Public*/
 	isFirstLoad: function() {
 		return this.firstLoad;
 	},
 
-	/*public*/
+	/*Public*/
 	getVersion: function() {
 		return "0.6";
 	},
 
-	/*Gets browser's current hash location; for Safari, reads value from a hidden form field */
+	/*Get browser's current hash location; for Safari, read value from a hidden form field*/
 
-	/*public*/
+	/*Public*/
 	getCurrentLocation: function() {
 		var r = (this.isSafari
 			? this.getSafariState()
@@ -253,63 +253,68 @@ window.dhtmlHistory = {
 		return r;
 	},
 	
-	/*public: manually parse the current url for a hash; tip of the hat to YUI*/
+	/*Public: Manually parse the current url for a hash; tip of the hat to YUI*/
     getCurrentHash: function() {
 		var r = window.location.href;
 		var i = r.indexOf("#");
 		return (i >= 0
 			? r.substr(i+1)
-			: null
+			: ""
 		);
     },
 	
-	/*- - - - - - - - - - - - */
+	/*- - - - - - - - - - - -*/
 	
-	/*private: constant for our own internal history event called when the page is loaded*/
+	/*Private: Constant for our own internal history event called when the page is loaded*/
 	PAGELOADEDSTRING: "DhtmlHistory_pageLoaded",
 	
-	/*private: Our history change listener. */
+	/*Private: Our history change listener.*/
 	listener: null,
 
-	/*private: milliseconds to wait between add requests - will be reset for certain browsers*/
+	/*Private: MS to wait between add requests - will be reset for certain browsers*/
 	waitTime: 200,
 	
-	/*private: milliseconds before an add request can execute */
+	/*Private: MS before an add request can execute*/
 	currentWaitTime: 0,
 
-	/*private: Our current hash location, without the "#" symbol. */
+	/*Private: Our current hash location, without the "#" symbol.*/
 	currentLocation: null,
 
-	/*private: hidden iframe used to IE to detect history changes*/
+	/*Private: Hidden iframe used to IE to detect history changes*/
 	iframe: null,
 
-	/*private: Used only by Safari*/
+	/*Private: Flags and DOM references used only by Safari*/
 	safariHistoryStartPoint: null,
 	safariStack: null,
 	safariLength: null,
 
-	/*private: flag used to handle edge cases*/
+	/*Private: Flag used to keep checkLocation() from doing anything when it discovers location changes we've made ourselves
+	programmatically with the add() method. Basically, add() sets this to true. When checkLocation() discovers it's true,
+	it refrains from alerting our listener, then resets the flag to false for next cycle. That way, our listener only gets fired on
+	history change events triggered by the back and forward buttons in the browser. This flag also helps us set up IE's special
+	iframe-based method of handling history changes.*/
 	ignoreLocationChange: null,
 
-	/*private: A flag that indicates that we should fire a history change event when we are ready, i.e. after we are initialized and
+	/*Private: A flag that indicates that we should fire a history change event when we are ready, i.e. after we are initialized and
 	we have a history change listener. This is needed due to an edge case in browsers other than IE; if you leave a page entirely
 	then return, we must fire this as a history change event. Unfortunately, we have lost all references to listeners from earlier,
-	because JavaScript clears out. */
+	because JavaScript clears out.*/
 	fireOnNewListener: null,
 
-	/*private: A variable that indicates whether this is the first time this page has been loaded. If you go to a web page, leave it
+	/*Private: A variable that indicates whether this is the first time this page has been loaded. If you go to a web page, leave it
 	for another one, and then return, the page's onload listener fires again. We need a way to differentiate between the first page
 	load and subsequent ones. This variable works hand in hand with the pageLoaded variable we store into historyStorage.*/
 	firstLoad: null,
 
-	/*private: A variable to handle an important edge case in IE. In IE, if a user manually types an address into their browser's
-	location bar, we must intercept this by continiously checking the location bar with an timer interval. However, if we manually
-	change the location bar ourselves programmatically, when using our hidden iframe, we need to ignore these changes. Unfortunately,
-	these changes are not atomic, so we surround them with the variable 'ieAtomicLocationChange', that if true, means we are
-	programmatically setting the location and should ignore this atomic chunked change. */
+	/*Private: A variable to handle an important edge case in IE. In IE, if a user manually types an address into their browser's
+	location bar, we must intercept this by calling checkLocation() at regular intervals. However, if we are programmatically
+	changing the location bar ourselves using the add() method, we need to ignore these changes in checkLocation(). Unfortunately,
+	these changes take several lines of code to complete, so for the duration of those lines of code, we set this variable to true.
+	That signals to checkLocation() to ignore the change-in-progress. Once we're done with our chunk of location-change code in
+	add(), we set this back to false. We'll do the same thing when capturing user-entered address changes in checkLocation itself.*/
 	ieAtomicLocationChange: null,
 	
-	/*private: Create IE-specific DOM nodes and overrides*/
+	/*Private: Create IE-specific DOM nodes and overrides*/
 	createIE: function(initialHash) {
 		/*write out a hidden iframe for IE and set the amount of time to wait between add() requests*/
 		this.waitTime = 400;/*IE needs longer between history updates*/
@@ -323,15 +328,15 @@ window.dhtmlHistory = {
 		this.iframe = document.getElementById(iframeID);
 	},
 	
-	/*private: Create Opera-specific DOM nodes and overrides*/
+	/*Private: Create Opera-specific DOM nodes and overrides*/
 	createOpera: function() {
+		this.waitTime = 400;/*Opera needs longer between history updates*/
 		var imgHTML = '<img src="javascript:location.href=\'javascript:dhtmlHistory.checkLocation();\';" style="' + historyStorage.hideStyles + '" />';
 		document.write(imgHTML);
 	},
 	
-	/*private: Create Safari-specific DOM nodes and overrides*/
+	/*Private: Create Safari-specific DOM nodes and overrides*/
 	createSafari: function() {
-		this.waitTime = 400;
 		var formID = "rshSafariForm";
 		var stackID = "rshSafariStack";
 		var lengthID = "rshSafariLength";
@@ -355,26 +360,26 @@ window.dhtmlHistory = {
 		}
 	},
 	
-	/*private: safari-only method to read the history stack from a hidden form field*/
+	/*Private: Safari method to read the history stack from a hidden form field*/
 	getSafariStack: function() {
 		var r = this.safariStack.value;
 		return historyStorage.fromJSON(r);
 	},
 
-	/*private: safari-only method to read from the history stack*/
+	/*Private: Safari method to read from the history stack*/
 	getSafariState: function() {
 		var stack = this.getSafariStack();
 		var state = stack[history.length - this.safariHistoryStartPoint - 1];
 		return state;
 	},			
-	/*private: safari-only method to write the history stack to a hidden form field*/
+	/*Private: Safari method to write the history stack to a hidden form field*/
 	putSafariState: function(newLocation) {
 	    var stack = this.getSafariStack();
 	    stack[history.length - this.safariHistoryStartPoint] = newLocation;
 	    this.safariStack.value = historyStorage.toJSON(stack);
 	},
 
-	/*private: Notify the listener of new history changes. */
+	/*Private: Notify the listener of new history changes.*/
 	fireHistoryEvent: function(newHash) {
 		/*extract the value from our history storage for this hash*/
 		var historyData = historyStorage.get(newHash);
@@ -382,26 +387,26 @@ window.dhtmlHistory = {
 		this.listener.call(null, newHash, historyData);
 	},
 	
-	/*private: Sees if the browser has changed location. This is the primary history mechanism for Firefox. For IE, we use this to
+	/*Private: See if the browser has changed location. This is the primary history mechanism for Firefox. For IE, we use this to
 	handle an important edge case: if a user manually types in a new hash value into their IE location bar and press enter, we want to
 	to intercept this and notify any history listener.*/
 	checkLocation: function() {
 		
-		/*ignore any location changes that we made ourselves for browsers other than IE*/
+		/*Ignore any location changes that we made ourselves for browsers other than IE*/
 		if (!this.isIE && this.ignoreLocationChange) {
 			this.ignoreLocationChange = false;
 			return;
 		}
 
-		/*if we are dealing with IE and we are in the middle of making a location change from an iframe, ignore it*/
-		if (!this.isIE && this.ieAtomicLocationChange) {/*TODO BD - Comments contradict the logic here, and it's hard to test */
+		/*If we are dealing with IE and we are in the middle of making a location change from an iframe, ignore it*/
+		if (!this.isIE && this.ieAtomicLocationChange) {
 			return;
 		}
 		
-		/*get hash location*/
+		/*Get hash location*/
 		var hash = this.getCurrentLocation();
 
-		/*do nothing if there's been no change*/
+		/*Do nothing if there's been no change*/
 		if (hash == this.currentLocation) {
 			return;
 		}
@@ -411,7 +416,7 @@ window.dhtmlHistory = {
 		we can return*/
 		this.ieAtomicLocationChange = true;
 
-		if (this.isIE && this.getIFrameHash() != hash) {
+		if (this.isIE && this.getIframeHash() != hash) {
 			this.iframe.src = "blank.html?" + hash;
 		}
 		else if (this.isIE) {
@@ -419,17 +424,17 @@ window.dhtmlHistory = {
 			return;
 		}
 
-		/*save this new location*/
+		/*Save this new location*/
 		this.currentLocation = hash;
 
 		this.ieAtomicLocationChange = false;
 
-		/*notify listeners of the change*/
+		/*Notify listeners of the change*/
 		this.fireHistoryEvent(hash);
 	},
 
-	/*private: Gets the current location of the hidden IFrames that is stored as history. For IE. */
-	getIFrameHash: function() {
+	/*Private: Get the current location of IE's hidden iframe.*/
+	getIframeHash: function() {
 		var doc = this.iframe.contentWindow.document;
 		var hash = String(doc.location.search);
 		if (hash.length == 1 && hash.charAt(0) == "?") {
@@ -441,7 +446,7 @@ window.dhtmlHistory = {
 		return hash;
 	},
 
-	/*private: Removes any leading hash that might be on a location. */
+	/*Private: Remove any leading hash that might be on a location.*/
 	removeHash: function(hashValue) {
 		var r;
 		if (hashValue === null || hashValue === undefined) {
@@ -462,7 +467,7 @@ window.dhtmlHistory = {
 		return r;
 	},
 
-	/*private: For IE, says when the hidden iframe has finished loading. */
+	/*Private: For IE, tell when the hidden iframe has finished loading.*/
 	iframeLoaded: function(newLocation) {
 		/*ignore any location changes that we made ourselves*/
 		if (this.ignoreLocationChange) {
@@ -470,7 +475,7 @@ window.dhtmlHistory = {
 			return;
 		}
 
-		/*get the new location*/
+		/*Get the new location*/
 		var hash = String(newLocation.search);
 		if (hash.length == 1 && hash.charAt(0) == "?") {
 			hash = "";
@@ -478,13 +483,10 @@ window.dhtmlHistory = {
 		else if (hash.length >= 2 && hash.charAt(0) == "?") {
 			hash = hash.substring(1);
 		}
+		/*Keep the browser location bar in sync with the iframe hash*/
+		window.location.hash = hash;
 
-		/*move to this location in the browser location bar if we are not dealing with a page load event*/
-		if (this.pageLoadEvent !== true) {
-			window.location.hash = hash;
-		}
-
-		/*notify listeners of the change*/
+		/*Notify listeners of the change*/
 		this.fireHistoryEvent(hash);
 	}
 
@@ -496,7 +498,7 @@ the user navigates back to the page.*/
 
 window.historyStorage = {
 	
-	/*public*/
+	/*Public*/
 	put: function(key, value) {
 		this.assertValidKey(key);
 		/*if we already have a value for this, remove the value before adding the new one*/
@@ -506,10 +508,10 @@ window.historyStorage = {
 		/*store this new key*/
 		this.storageHash[key] = value;
 		/*save and serialize the hashtable into the form*/
-		this.saveHashTable(); 
+		this.saveHashTable();
 	},
 
-	/*public*/
+	/*Public*/
 	get: function(key) {
 		this.assertValidKey(key);
 		/*make sure the hash table has been loaded from the form*/
@@ -521,7 +523,7 @@ window.historyStorage = {
 		return value;
 	},
 
-	/*public*/
+	/*Public*/
 	remove: function(key) {
 		this.assertValidKey(key);
 		/*make sure the hash table has been loaded from the form*/
@@ -532,13 +534,13 @@ window.historyStorage = {
 		this.saveHashTable();
 	},
 
-	/*public: Clears out all saved data. */
+	/*Public: Clears out all saved data.*/
 	reset: function() {
 		this.storageField.value = "";
 		this.storageHash = {};
 	},
 
-	/*public*/
+	/*Public*/
 	hasKey: function(key) {
 		this.assertValidKey(key);
 		/*make sure the hash table has been loaded from the form*/
@@ -546,34 +548,30 @@ window.historyStorage = {
 		return (typeof this.storageHash[key] !== "undefined");
 	},
 
-	/*public*/
+	/*Public*/
 	isValidKey: function(key) {
-		var r = (key === undefined
-			? false
-			: typeof key === "string"
-		);
-		return r;
+		return (typeof key === "string");
 	},
 	
-	/*public - CSS strings utilized by both objects to hide or show behind-the-scenes DOM elements*/
+	/*Public - CSS strings utilized by both objects to hide or show behind-the-scenes DOM elements*/
 	showStyles: 'border:0;margin:0;padding:0;',
-	hideStyles: 'left: -1000px;top:-1000px;width:1px;height:1px;border:0;position:absolute;',
+	hideStyles: 'left:-1000px;top:-1000px;width:1px;height:1px;border:0;position:absolute;',
 	
-	/*public - debug mode flag*/
+	/*Public - debug mode flag*/
 	debugMode: false,
 	
-	/*- - - - - - - - - - - - */
+	/*- - - - - - - - - - - -*/
 
-	/*private: Our hash of key name/values. */
+	/*Private: Our hash of key name/values.*/
 	storageHash: {},
 
-	/*private: If true, we have loaded our hash table out of the storage form. */
+	/*Private: If true, we have loaded our hash table out of the storage form.*/
 	hashLoaded: false, 
 
-	/*private: DOM reference to our history field */
+	/*Private: DOM reference to our history field*/
 	storageField: null,
 
-	/*private: set up our historyStorage object for use by dhtmlHistory*/
+	/*Private: Set up our historyStorage object for use by dhtmlHistory*/
 	setup: function(isOpera,options) {
 		
 		/*process init parameters*/
@@ -603,35 +601,35 @@ window.historyStorage = {
 		document.write(textareaHTML);
 		this.storageField = document.getElementById(textareaID);
 		if (isOpera) {
-			this.storageField.focus();
+			this.storageField.focus();/*Opera needs to focus this element before persisting values in it*/
 		}
 	},
-
-	/*private: Asserts that a key is valid, throwing an exception if it is not. */
+	
+	/*Private: Assert that a key is valid; throw an exception if it not.*/
 	assertValidKey: function(key) {
-		if (!this.isValidKey(key)) {
-			var e = "Please provide a valid key for window.historyStorage. Invalid key = " + key + ".";
-			throw new Error(e);
+		var isValid = this.isValidKey(key);
+		if (!isValid && this.debugMode) {
+			throw new Error("Please provide a valid key for window.historyStorage. Invalid key = " + key + ".");
 		}
 	},
 
-	/*private: Loads the hash table up from the form. */
+	/*Private: Load the hash table up from the form.*/
 	loadHashTable: function() {
 		if (!this.hashLoaded) {	
 			var serializedHashTable = this.storageField.value;
 			if (serializedHashTable !== "" && serializedHashTable !== null) {
 				this.storageHash = this.fromJSON(serializedHashTable);
-				this.hashLoaded = true;/*TODO BD: figure out whether moving this was a good idea; also how to optimize timing and number of calls to this method*/
+				this.hashLoaded = true;
 			}
 		}
 	},
-	/*private: Saves the hash table into the form. */
+	/*Private: Save the hash table into the form.*/
 	saveHashTable: function() {
 		this.loadHashTable();
 		var serializedHashTable = this.toJSON(this.storageHash);
 		this.storageField.value = serializedHashTable;
 	},
-	/*private: bridges for our toJSON and fromJSON implementations - both rely on 2007 JSON.org library - can be overridden by options bundle */
+	/*Private: Bridges for our JSON implementations - both rely on 2007 JSON.org library - can be overridden by options bundle*/
 	toJSON: function(o) {
 		return o.toJSONString();
 	},
