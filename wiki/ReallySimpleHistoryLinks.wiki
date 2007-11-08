@@ -7,6 +7,7 @@
  * [http://www.onjava.com/pub/a/onjava/2005/10/26/ajax-handling-bookmarks-and-back-button.html ONJava.com -- AJAX: How to Handle Bookmarks and Back Buttons]
  * [http://codinginparadise.org/weblog/2005/09/safari-no-dhtml-history-possible.html Brad Neuberg: Coding In Paradise: Safari: No DHTML History Possible]
  * [http://codinginparadise.org/weblog/2006/06/ajax-history-support-in-safari.html Brad Neuberg: Coding In Paradise: Ajax History Support in Safari Possible?]
+ * [http://codinginparadise.org/weblog/2005/09/ajax-history-libraries.html AJAX History Libraries]
 
 == Brian Dillard's posts ==
 
