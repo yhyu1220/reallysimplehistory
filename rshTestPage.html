@@ -24,24 +24,12 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 <title>Really Simple History: Test Page</title>
 
 <script type="text/javascript" src="json2007.js"></script>
-<!--
-	<script type="text/javascript" src="json2005.js"></script>
-	<script type="text/javascript" src="prototype.js"></script>
--->
 <script type="text/javascript" src="rsh.js"></script>
 
 <script type="text/javascript">
 /*instantiate our history object*/
 window.dhtmlHistory.create({
-	debugMode: true 
-	//, toJSON: function(o) {
-		//return JSON.stringify(o);/*2005 JSON lib*/
-		//return Object.toJSON(o);/*Prototype*/
-	//}
-	//, fromJSON: function(s) {
-		//return JSON.parse(s);/*2005 JSON lib*/
-		//return s.evalJSON();/*Prototype*/
-	//}
+	debugMode: true//set this to false, or just don't pass in an options bundle, to see real-world, non-debug conditions 
 });
 </script>
 
@@ -220,7 +208,7 @@ function logTopSubscriptions() {
 /* Gets the top 100 blog subscriptions as an OPML outline. - for a historyStorage test case */
 function loadTopSubscriptions() {
 	log("Loading top subscriptions...");
-	var url = "top100.opml";
+	var url = "rshTestPageTop100.opml";
 	var request = getXHR();
 	var processRequest = function() {
 		if (request.readyState == 4) {
@@ -327,7 +315,7 @@ function viewObjectState() {
 |</p>
 <p>	
 	| <a href="javascript:addHistoryEvent();">add history</a>
-	| <a href="http://www.google.com">go off-site</a>
+	| <a href="http://code.google.com/p/reallysimplehistory/">go off-site</a>
 	| <a href="javascript:testHistoryStorage();">test storage</a>
 	| <a href="javascript:testComplexXML();">test XML</a>
 |</p>
