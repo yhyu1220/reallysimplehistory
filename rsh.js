@@ -16,8 +16,13 @@ FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TOR
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-/*An object that provides history, history data, and bookmarking for DHTML and Ajax applications.*/
+/*
+	dhtmlHistory: An object that provides history, history data, and bookmarking for DHTML and Ajax applications.
+	
+	dependencies:
+		* the historyStorage object included in this file.
 
+*/
 window.dhtmlHistory = {
 	
 	/*Public: User-agent booleans*/
@@ -30,6 +35,13 @@ window.dhtmlHistory = {
 	
 	/*Public: Create the DHTML history infrastructure*/
 	create: function(options) {
+		
+		/*
+			options - object to store initialization parameters
+			options.debugMode - boolean that causes hidden form fields to be shown for development purposes.
+			options.toJSON - function to override default JSON stringifier
+			options.fromJSON - function to override default JSON parser
+		*/
 
 		var that = this;
 
@@ -55,7 +67,7 @@ window.dhtmlHistory = {
 		}
 
 		/*Set up the historyStorage object; pass in init parameters*/
-		window.historyStorage.setup(this.isOpera,options);
+		window.historyStorage.setup(options);
 
 		/*Execute browser-specific setup methods*/
 		if (this.isSafari) {
@@ -290,9 +302,9 @@ window.dhtmlHistory = {
 
 	/*Private: Flag used to keep checkLocation() from doing anything when it discovers location changes we've made ourselves
 	programmatically with the add() method. Basically, add() sets this to true. When checkLocation() discovers it's true,
-	it refrains from alerting our listener, then resets the flag to false for next cycle. That way, our listener only gets fired on
-	history change events triggered by the back and forward buttons in the browser. This flag also helps us set up IE's special
-	iframe-based method of handling history changes.*/
+	it refrains from firing our listener, then resets the flag to false for next cycle. That way, our listener only gets fired on
+	history change events triggered by the user via back/forward buttons and manual hash changes. This flag also helps us set up
+	IE's special iframe-based method of handling history changes.*/
 	ignoreLocationChange: null,
 
 	/*Private: A flag that indicates that we should fire a history change event when we are ready, i.e. after we are initialized and
@@ -346,7 +358,7 @@ window.dhtmlHistory = {
 			: historyStorage.hideStyles
 		);
 		var safariHTML = '<form id="' + formID + '" style="' + formStyles + '">'
-			+ '<input type="text" style="' + inputStyles + '" id="' + stackID + '" value="[]"/>'/*TODO BD: should "[]" really go here?*/
+			+ '<input type="text" style="' + inputStyles + '" id="' + stackID + '" value="[]"/>'
 			+ '<input type="text" style="' + inputStyles + '" id="' + lengthID + '" value=""/>'
 		+ '</form>';
 		document.write(safariHTML);
@@ -492,11 +504,57 @@ window.dhtmlHistory = {
 
 };
 
-/*An object that uses a hidden form to store history state across page loads. The chief mechanism for doing so is using the
-fact that browsers save the text in form data for the life of the browser and cache, which means the text is still there when
-the user navigates back to the page.*/
-
+/*
+	historyStorage: An object that uses a hidden form to store history state across page loads. The mechanism for doing so relies on
+	the fact that browsers save the text in form data for the life of the browser session, which means the text is still there when
+	the user navigates back to the page. This object can be used independently of the dhtmlHistory object for caching of Ajax
+	session information.
+	
+	dependencies: 
+		* json2007.js (included in a separate file) or alternate JSON methods passed in through an options bundle.
+*/
 window.historyStorage = {
+	
+	/*Public: Set up our historyStorage object for use by dhtmlHistory or other objects*/
+	setup: function(options) {
+		
+		/*
+			options - object to store initialization parameters - passed in from dhtmlHistory or directly into historyStorage
+			options.debugMode - boolean that causes hidden form fields to be shown for development purposes.
+			options.toJSON - function to override default JSON stringifier
+			options.fromJSON - function to override default JSON parser
+		*/
+		
+		/*process init parameters*/
+		if (typeof options !== "undefined") {
+			if (options.debugMode) {
+				this.debugMode = options.debugMode;
+			}
+			if (options.toJSON) {
+				this.toJSON = options.toJSON;
+			}
+			if (options.fromJSON) {
+				this.fromJSON = options.fromJSON;
+			}
+		}		
+		
+		/*write a hidden form and textarea into the page; we'll stow our history stack here*/
+		var formID = "rshStorageForm";
+		var textareaID = "rshStorageField";
+		var formStyles = this.debugMode ? historyStorage.showStyles : historyStorage.hideStyles;
+		var textareaStyles = (historyStorage.debugMode
+			? 'width: 800px;height:80px;border:1px solid black;'
+			: historyStorage.hideStyles
+		);
+		var textareaHTML = '<form id="' + formID + '" style="' + formStyles + '">'
+			+ '<textarea id="' + textareaID + '" style="' + textareaStyles + '"></textarea>'
+		+ '</form>';
+		document.write(textareaHTML);
+		this.storageField = document.getElementById(textareaID);
+		if (typeof window.opera !== "undefined") {
+			this.storageField.focus();/*Opera needs to focus this element before persisting values in it*/
+		}
+	},
 	
 	/*Public*/
 	put: function(key, value) {
@@ -571,40 +629,6 @@ window.historyStorage = {
 	/*Private: DOM reference to our history field*/
 	storageField: null,
 
-	/*Private: Set up our historyStorage object for use by dhtmlHistory*/
-	setup: function(isOpera,options) {
-		
-		/*process init parameters*/
-		if (typeof options !== "undefined") {
-			if (options.debugMode) {
-				this.debugMode = options.debugMode;
-			}
-			if (options.toJSON) {
-				this.toJSON = options.toJSON;
-			}
-			if (options.fromJSON) {
-				this.fromJSON = options.fromJSON;
-			}
-		}		
-		
-		/*write a hidden form and textarea into the page; we'll stow our history stack here*/
-		var formID = "rshStorageForm";
-		var textareaID = "rshStorageField";
-		var formStyles = this.debugMode ? historyStorage.showStyles : historyStorage.hideStyles;
-		var textareaStyles = (historyStorage.debugMode
-			? 'width: 800px;height:80px;border:1px solid black;'
-			: historyStorage.hideStyles
-		);
-		var textareaHTML = '<form id="' + formID + '" style="' + formStyles + '">'
-			+ '<textarea id="' + textareaID + '" style="' + textareaStyles + '"></textarea>'
-		+ '</form>';
-		document.write(textareaHTML);
-		this.storageField = document.getElementById(textareaID);
-		if (isOpera) {
-			this.storageField.focus();/*Opera needs to focus this element before persisting values in it*/
-		}
-	},
-	
 	/*Private: Assert that a key is valid; throw an exception if it not.*/
 	assertValidKey: function(key) {
 		var isValid = this.isValidKey(key);
