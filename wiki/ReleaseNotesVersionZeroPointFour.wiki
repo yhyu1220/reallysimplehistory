@@ -177,7 +177,7 @@ RSH works differently internally for different browsers, but in general we use a
 The O'Reilly Network will be publishing a forthcomming article, titled "AJAX: How to Handle Bookmarks and Back Buttons." This article goes into much more detail, with full examples, than this README can accomodate.
 Demos and Examples
 
-The O'Reilly Network article will have full examples. Until then, see the two testing classes for the RSH framework for sample code:
+The O'Reilly Network article will have full examples. Until then, see the two testing classes for the RSH framework for sample code (both included with the download):
 
   * testDhtmlHistory.html
   * testHistoryStorage.html
