@@ -1,5 +1,7 @@
 #summary Release notes for version 0.4 - adapted from Brad Neuberg's original site.
 
+*We encourage all users to upgrade from 0.4 to the new 0.6 release. 0.6 RC1 is out now; the final version is scheduled for 12.01.2007.*
+
 =What is This?=
 
 The Really Simple History (RSH) framework makes it easy for AJAX applications to incorporate bookmarking and back and button support. By default, AJAX systems are not bookmarkable, nor can they recover from the user pressing the browser's back and forward buttons. The RSH library makes it possible to handle both cases.
@@ -7,16 +9,6 @@ The Really Simple History (RSH) framework makes it easy for AJAX applications to
 In addition, RSH provides a framework to cache transient session information that persists after a user leaves the web page. This cache is used by the RSH framework to help with history issues, but can also be used by your own applications to improve application performance. The cache is linked to a single instance of the web page, and will disappear when the user closes their browser or clear their browser's cache.
 
 RSH works on Internet Explorer 6+ and Gecko-based browsers, like Firefox. Safari is not supported.
-
-=News=
-
-    * [MM-DD-YY] - Some news item here.
-
-=Versions=
-
-The most recent version of RSH is version 0.04.
-
-    * Version 0.04 - Beta release prepared for the O'Reilly article "AJAX: How to Handle Bookmarks and Back Buttons."
 
 =Contributors=
 
