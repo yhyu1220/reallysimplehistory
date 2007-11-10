@@ -1,18 +1,33 @@
-#summary Release notes for the 0.6 beta version of RSH
+#summary Release notes for RSH 0.6 RC1
 
-Brian and Brad are happy to announce the beta release of Really Simple History 06. This is the first attempt to update this library in two years. As such, we'd like your help putting it through its paces. Please report any issues using the [http://code.google.com/p/reallysimplehistory/sourcehttp://code.google.com/p/reallysimplehistory/issues/list Google Code Issues tab] or by emailing Brian at bdillard(at)pathf(dot)com. Brad continues on as RSH's proud poppa, but Brian takes all the complaints (and any congrats) for changes since 0.4.
+Brian and Brad are happy to announce Really Simple History 0.6 Release Candidate 1. This release represents many enhancements over 0.4 and many bug-fixes over 0.6 beta. The final, stable release of 0.6 is scheduled for December 1, 2007.
 
 == Where to get it ==
 
-For latest stable, packaged-up ZIP files, go to the downloads page:
+For latest stable, packaged-up ZIP files, go to the *[http://code.google.com/p/reallysimplehistory/downloads/list downloads tab]*
 
-  * [http://code.google.com/p/reallysimplehistory/downloads/list 0.6 download]
+For up-to-the-minute revisions, visit the *[http://code.google.com/p/reallysimplehistory/source SVN repo]*.
 
-For up-to-the-minute revisions, visit the SVN repo. RSH is now (finally) version-controlled, and Brian is commiting changes there atomically. When significant milestones are reached, he'll be packaging them up on the downloads page. *In the meantime, the supported browsers list and the issues list below are being updated to reflect the state of the SVN repo.*
+== Changelog ==
 
-  * [http://code.google.com/p/reallysimplehistory/source Google Code Source tab]
+=== 0.6 RC 1 ===
 
-== New features and change log==
+  *  Rock-solid support of Opera up to 9.5 beta for Mac and PC.
+  * Rock-solid support of Safari/Mac from 2.03 through 3.03.
+  * Tons of internal refactoring.
+  * Two-line initialization of dhtmlHistory and historyStorage (as opposed to the previous two init calls in the library and two more in your code).
+  * Support for an optional options bundle in the initialization call to trigger debug mode or override default JSON methods.
+  * Compatibility with Prototype thanks to the aforementioned JSON override capability.
+  * Additional choice in JSON parsers; we now ship with a default 2007 JSON parser that alters core object prototypes and an older 2005 version that doesn't.
+  * Better user-agent sniffing that's more resistant to UA spoofing.
+  * Removal of a bug introduced in 0.6 beta that threw an error when you hit a virgin (hashless) page state.
+  * Graceful swallowing of errors in non-debug mode.
+  * Replacement of equality operators with JSLint-friendly identity operators where appropriate.
+  * Cleanup of a little cruft from the 0.4 and 0.6 beta versions.
+
+
+
+=== 0.6 Beta ===
 
   * Added support for IE7
   * Added support for Opera/Mac and Opera/Win
