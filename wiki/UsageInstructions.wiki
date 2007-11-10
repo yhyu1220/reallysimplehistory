@@ -1,5 +1,7 @@
 #summary Usage instructions and examples for Really Simple History
 
+*These instructions are for 0.6 RC1. For deployment of 0.4, see the [ReleaseNotesVersionZeroPointFour release notes] for that version.*
+
 = How to deploy Really Simple History =
 
   * Always test RSH from a local or remote web server. It will not function properly from a file: URL on your workstation - especially in IE.
