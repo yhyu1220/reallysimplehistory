@@ -10,7 +10,7 @@
 
   * If your supported browser list differs from RSH's, you should perform browser detection in your own code. RSH does nothing to disable itself in any browser.
 
-= Deployment examples
+= Deployment examples =
 
 == Default Install ==
 
