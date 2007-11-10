@@ -4,9 +4,9 @@
 
 = 0.6 Release Candidate 1 =
 
-Version 0.6 was released as a beta on 10.23.2007. It is now deprecated.
+Version 0.6 RC1 was released 11.09.2007. The final release is expected to launch 12.01.2007.
 
-  * [ReleaseNotesVersionZeroPointSix 0.6 beta release notes]
+  * [ReleaseNotesVersionZeroPointSixRC1 0.6 RC1 release notes]
 
 = 0.6 Beta =
 
