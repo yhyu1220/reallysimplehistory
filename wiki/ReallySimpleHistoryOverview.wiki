@@ -1,16 +1,21 @@
 #summary Main wiki page for the Really Simple History JavaScript library.
 
-= Beta release: 0.6 =
+*All versions can be downloaded from the [http://code.google.com/p/reallysimplehistory/downloads/list downloads tab]*
 
-Version 0.6 was released as a beta on 10.23.2007 with an eye toward a full public release in a week or so.
+= 0.6 Release Candidate 1 =
+
+Version 0.6 was released as a beta on 10.23.2007. It is now deprecated.
 
   * [ReleaseNotesVersionZeroPointSix 0.6 beta release notes]
-  * [http://code.google.com/p/reallysimplehistory/downloads/list 0.6 download]
-  * [http://blogs.pathf.com/agileajax/2007/10/coming-soon-rea.html Brian's blog post] 
 
-= Latest stable version: 0.4 =
+= 0.6 Beta =
+
+Version 0.6 was released as a beta on 10.23.2007. It is now deprecated.
+
+  * [ReleaseNotesVersionZeroPointSix 0.6 beta release notes]
+
+= 0.4: Current Stable Release =
 
 Brad Neuberg's original 0.4 version from 2005 is still the latest public release.
 
   * [ReleaseNotesVersionZeroPointFour 0.4 release notes]
-  * [http://code.google.com/p/reallysimplehistory/downloads/list 0.4 download]
