@@ -26,13 +26,11 @@ For up-to-the-minute revisions, visit the *[http://code.google.com/p/reallysimpl
   * Replaced equality operators with JSLint-friendly identity operators where appropriate.
   * Cleaned up a little cruft from the 0.4 and 0.6 beta versions.
 
-
-
 === 0.6 Beta ===
 
   * Added support for IE7
-  * Added support for Opera/Mac and Opera/Win
-  * Added support for Safari 2/Mac
+  * Added support for Opera/Mac and Opera/Win (though some bugs remain)
+  * Added support for Safari 2/Mac (though some bugs remain)
   * Modernized the JSON parser and moved it to a separate file
   * Provided bridge methods for JSON calls to make it easier to swap out JSON parsers
   * Rebuilt original test pages into a single test page that allows you to peek behind the scenes at hidden, hacked-in DOM elements
@@ -49,39 +47,23 @@ For up-to-the-minute revisions, visit the *[http://code.google.com/p/reallysimpl
 
 === Supported ===
 
-  * IE6
-  * IE7
-  * Firefox 2.x (Mac, Windows, Ubuntu)
+  * IE6 (Windows)
+  * IE7 (Windows)
+  * Firefox/Mozilla/Netscape/Gecko-based browsers (Mac, Windows, Linux - all versions since 2005)
   * Opera 9.22-9.5 (Mac and Windows)
   * Safari 2.03, 2.04 and 3.03 (Mac)
 
 === Unsupported ===
 
-  * Non-Mozilla-based Linux browsers
-  * Safari 3.x (Windows): It works as long as your RSH app isn't the first page you visit, but even then back and forward button bugs in the browser itself can cause problems.
+  * Safari 3.x (Windows): Falls prey to fundamental bugs in Apple's current beta release.
+  * Non-Mozilla-based Linux browsers.
   * Any browser not listed above; test before you deploy.
 
-=== Browser scenarios that still need to be tested ===
-  * Firefox for Red Hat
-  * IE7/Vista
-  * IE7/XP non-standalone
-  * All Mac browsers on Leopard (Opera 9.22/9.5/Safari 2?/Safari 3/Firefox 2)
-  * Non-Firefox Mozilla clients, all platforms (Netscape, Mozilla, etc.)
-  * ~~Safari 3/Mac beta~~ and nightly webkit builds
-  * ~~Opera 9.5/Mac and 9.5/PC~~
-  * ~~Firefox for Ubuntu~~
+=== Browsers without recent test coverage ===
 
-== Roadmap ==
-
-The current goal is to remedy as many of the above-named issues as possible before the next public release. We're starting to migrate issues from this page into the issue tracker now that the major ones have been tackled.
-
-=== Wishlist features/enhancements ===
-
-  * Provide a minified production version
-  * Perform proper garbage collection
-  * Document update abilities of the add() method
-  * Do less internal branching based on useragent - use functional programming patterns to redeclare methods by browser
-  * Make private methods actually private/protected
-  * Improve hash parsing logic with regexes
-  * Debug page: Add the ability for users to add test cases on the fly in the browser
-  * Debug page: improve log-window readability
+  * All browsers on Vista
+  * All browsers on Leopard
+  * Non-standalone IE7/XP
+  * Konquerer
+  * Older versions of Opera
+  * IE 5.5
