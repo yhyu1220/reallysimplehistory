@@ -8,6 +8,10 @@ For latest stable, packaged-up ZIP files, go to the *[http://code.google.com/p/r
 
 For up-to-the-minute revisions, visit the *[http://code.google.com/p/reallysimplehistory/source SVN repo]*.
 
+== How to use it ==
+
+Visit the UsageInstructions page.
+
 == Changelog ==
 
 === 0.6 RC 1 ===
