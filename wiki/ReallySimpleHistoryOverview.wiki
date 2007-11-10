@@ -6,13 +6,13 @@
 
 Version 0.6 RC1 was released 11.09.2007. The final release is expected to launch 12.01.2007.
 
-  * [ReleaseNotesVersionZeroPointSixRC1 0.6 RC1 release notes]
+  * [ReleaseNotesVersionZeroPointSix 0.6 release notes]
 
 = 0.6 Beta =
 
 Version 0.6 was released as a beta on 10.23.2007. It is now deprecated.
 
-  * [ReleaseNotesVersionZeroPointSix 0.6 beta release notes]
+  * [ReleaseNotesVersionZeroPointSix 0.6 release notes]
 
 = 0.4: Current Stable Release =
 
