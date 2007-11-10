@@ -126,8 +126,9 @@ window.dhtmlHistory = {
 		setInterval(locationHandler, 100);
 	},	
 	
-	/*Public: Initialize our DHTML history. You must call this after the page is finished loading.*/
-	initialize: function() {
+	/*Public: Initialize our DHTML history. You must call this after the page is finished loading. Optionally, you can pass your listener in
+	here so you don't need to make a separate call to addListener*/
+	initialize: function(listener) {
 		/*IE needs to be explicitly initialized. IE doesn't autofill form data until the page is finished loading, so we have to wait*/
 		if (this.isIE) {
 			/*If this is the first time this page has loaded*/
@@ -142,6 +143,9 @@ window.dhtmlHistory = {
 				this.fireOnNewListener = true;
 				this.firstLoad = false;   
 			}
+		}
+		if (listener) {
+			this.addListener(listener);/**/
 		}
 	},
 

@@ -36,13 +36,9 @@ window.dhtmlHistory.create({
 <script type="text/javascript">
 
 window.onload = function() {
-	//initialize our DHTML history
-	dhtmlHistory.initialize();
+	//initialize our DHTML history and subscribe to DHTML history change events
+	dhtmlHistory.initialize(historyChange);
 	log("<b>dhtmlHistory initialized</b>");
-
-	//subscribe to DHTML history change events
-	dhtmlHistory.addListener(historyChange);
-	log("<b>dhtmlHistory listener created</b>");
 };
 
 /*basic DHTML logging for our test page*/
