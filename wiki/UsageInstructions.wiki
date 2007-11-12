@@ -70,7 +70,7 @@ window.onload = function() {
 
 }}}
 
-== Install for users of Prototype.js ==
+== Install for users of prototype.js ==
 
 {{{
 
