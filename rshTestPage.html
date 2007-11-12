@@ -27,20 +27,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 <script type="text/javascript" src="rsh.js"></script>
 
 <script type="text/javascript">
-/*instantiate our history object*/
-window.dhtmlHistory.create({
-	debugMode: true//set this to false, or just don't pass in an options bundle, to see real-world, non-debug conditions 
-});
-</script>
-
-<script type="text/javascript">
-
-window.onload = function() {
-	//initialize our DHTML history and subscribe to DHTML history change events
-	dhtmlHistory.initialize(historyChange);
-	log("<b>dhtmlHistory initialized</b>");
-};
-
 /*basic DHTML logging for our test page*/
 function log(msg) {
 	var logNode = document.getElementById("logWin");
@@ -302,6 +288,18 @@ function viewObjectState() {
 </head>
 
 <body>
+	
+<script type="text/javascript">
+/*instantiate our history object*/
+window.dhtmlHistory.create({
+	debugMode: true//set this to false, or just don't pass in an options bundle, to see real-world, non-debug conditions
+});
+window.onload = function() {
+	//initialize our DHTML history and subscribe to DHTML history change events
+	dhtmlHistory.initialize(historyChange);
+	log("<b>dhtmlHistory initialized</b>");
+};
+</script>
 	
 <p>
 	| <a href="javascript:toggleInstructions();">toggle instructions</a>
