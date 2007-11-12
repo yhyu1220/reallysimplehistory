@@ -4,7 +4,7 @@
 
 = How to deploy Really Simple History =
 
-  * Always deploy RSH from a local or remote web server. It will not function properly from a file: URL on your workstation - especially in IE. This is true of lots of JavaScript applications, but especially true of RSH.
+  * Always deploy RSH from a local or remote web server. It will not function properly from a file: URL on your workstation - especially in IE. This is true of lots of DHTML applications, but especially true of RSH.
 
   * Always call dhtmlHistory.initialize() and dhtmlHistory.addListener() from within a window.onload event. *RSH will break, especially in IE, if you try to initialize it from any flavor of DOMContentLoaded.* IE doesn't load up its saved cross-session form values until just after the body.onload event, so DOMContentLoaded is not an appropriate event for the initialization of RSH.
 
