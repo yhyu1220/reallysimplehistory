@@ -38,13 +38,17 @@ window.dhtmlHistory = {
 		
 		/*
 			options - object to store initialization parameters
+			options.blankURL - string to override the default location of blank.html. Must end in "?"
 			options.debugMode - boolean that causes hidden form fields to be shown for development purposes.
 			options.toJSON - function to override default JSON stringifier
 			options.fromJSON - function to override default JSON parser
 		*/
 
 		var that = this;
-
+		
+		/*Set up the historyStorage object; pass in options bundle*/
+		window.historyStorage.setup(options);
+		
 		/*set user-agent flags*/
 		var UA = navigator.userAgent.toLowerCase();
 		var platform = navigator.platform.toLowerCase();
@@ -66,10 +70,7 @@ window.dhtmlHistory = {
 			this.isSupported = true;
 		}
 
-		/*Set up the historyStorage object; pass in init parameters*/
-		window.historyStorage.setup(options);
-
-		/*Execute browser-specific setup methods*/
+		/*Create Safari/Opera-specific code*/
 		if (this.isSafari) {
 			this.createSafari();
 		} else if (this.isOpera) {
@@ -84,6 +85,13 @@ window.dhtmlHistory = {
 
 		/*Now that we have a hash, create IE-specific code*/
 		if (this.isIE) {
+			/*Optionally override the URL of IE's blank HTML file*/
+			if (typeof options !== "undefined" && options.blankURL) {
+				if (options.blankURL.indexOf("?") != options.blankURL.length - 1 && historyStorage.debugMode) {
+					throw new Error("Programmer error: options.blankURL must end with '?'");
+				}
+				this.blankURL = options.blankURL;
+			}
 			this.createIE(initialHash);
 		}
 
@@ -144,8 +152,9 @@ window.dhtmlHistory = {
 				this.firstLoad = false;   
 			}
 		}
+		/*optional convenience to save a separate call to addListener*/
 		if (listener) {
-			this.addListener(listener);/**/
+			this.addListener(listener);
 		}
 	},
 
@@ -233,7 +242,7 @@ window.dhtmlHistory = {
 
 				/*Change the hidden iframe's location if on IE*/
 				if (that.isIE) {
-					that.iframe.src = "blank.html?" + newLocation;
+					that.iframe.src = that.blankURL + newLocation;
 				}
 
 				/*End of atomic location change block for IE*/
@@ -255,7 +264,7 @@ window.dhtmlHistory = {
 
 	/*Public*/
 	getVersion: function() {
-		return "0.6";
+		return this.VERSIONNUMBER;
 	},
 
 	/*Get browser's current hash location; for Safari, read value from a hidden form field*/
@@ -283,6 +292,12 @@ window.dhtmlHistory = {
 	
 	/*Private: Constant for our own internal history event called when the page is loaded*/
 	PAGELOADEDSTRING: "DhtmlHistory_pageLoaded",
+	
+	VERSIONNUMBER: "0.6",
+	
+	/*Private: URL for the blank html file we use for IE; can be overridden via the options bundle. Otherwise it must be served
+	in same directory as this library*/
+	blankURL: "blank.html?",
 	
 	/*Private: Our history change listener.*/
 	listener: null,
@@ -339,7 +354,7 @@ window.dhtmlHistory = {
 			: historyStorage.hideStyles
 		);
 		var iframeID = "rshHistoryFrame";
-		var iframeHTML = '<iframe frameborder="0" id="' + iframeID + '" style="' + styles + '" src="blank.html?' + initialHash + '"></iframe>';
+		var iframeHTML = '<iframe frameborder="0" id="' + iframeID + '" style="' + styles + '" src="' + this.blankURL + initialHash + '"></iframe>';
 		document.write(iframeHTML);
 		this.iframe = document.getElementById(iframeID);
 	},
@@ -433,7 +448,7 @@ window.dhtmlHistory = {
 		this.ieAtomicLocationChange = true;
 
 		if (this.isIE && this.getIframeHash() != hash) {
-			this.iframe.src = "blank.html?" + hash;
+			this.iframe.src = this.blankURL + hash;
 		}
 		else if (this.isIE) {
 			/*the iframe is unchanged*/
