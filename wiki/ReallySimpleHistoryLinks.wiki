@@ -25,6 +25,7 @@
  * [http://developer.yahoo.com/yui/history/ Yahoo! UI Library: Browser History Manager]
  * [http://www.mikage.to/jquery/jquery_history.html jQuery History Plugin]
  * [http://ajaxian.com/archives/dshistory-another-history-back-button-manager Ajaxian » dsHistory: another history / back button manager]
+ * [http://www.akmattie.net/blog/dshistory/usage.html dsHistory usage instructions]
  * [http://www.asp.net/ajax/AjaxControlToolkit/ ASP.NET AJAX Control Toolkit : The Official Microsoft ASP.NET 2.0 Site]
  * [http://cvs.horde.org/dimp/js/src/dhtmlHistory.js SVN home for a Prototype-based offshoot of RSH 0.4]
  * LINK NEEDED: Dojo history/bookmarking solution
