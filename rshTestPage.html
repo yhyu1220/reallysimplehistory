@@ -64,12 +64,13 @@ var rawMaterial = [
 		value3: ["This is array[0]","This is array[1]"]
 	}],
 	["seven",[0,1,"three","five",9]],
-	["8","more data"]
+	["8","more data"],
 	["complexObject",{
 		new1: "all-new",
 		new2: "all-different",
 		new3: ["it's","the","uncanny","complexObject"]
 	}],
+	["two words","let's see how this thing handles keys with spaces in them"]
 ];
 
 function callHSTest(hash,val) {
@@ -134,6 +135,18 @@ function testHistoryStorage() {
 	if (bad != null) {
 		log("<b>The above value should have been null but wasn't. There must be an error in the framework.</b>");
 	}
+	
+	callHSTest("two words", "this key has two words; let's make sure we can run put, get, remove and hasKey on it");
+
+	log("Testing method hasKey on two-word key <b>two words</b>. Should return true. Method hasKey returns <b>" + historyStorage.hasKey("two words") + "</b>.");
+
+	log("Testing method get on two-word key <b>two words</b>. Method get returns <b>" + historyStorage.get("two words") + "</b>.");
+
+	historyStorage.remove("two words");
+	log("Removing the key <b>two words</b>.");
+	log("Testing method hasKey on two-word key <b>two words</b>. Should return false. Method hasKey returns <b>" + historyStorage.hasKey("two words") + "</b>.");
+	
+	
 	log("<b>End historyStorage test suite.</b>");
 }
 function testComplexXML() {
@@ -294,6 +307,8 @@ function viewObjectState() {
 window.dhtmlHistory.create({
 	debugMode: true//set this to false, or just don't pass in an options bundle, to see real-world, non-debug conditions
 });
+
+//TODO BD: change this to a real listener here and in README.txt
 window.onload = function() {
 	//initialize our DHTML history and subscribe to DHTML history change events
 	dhtmlHistory.initialize(historyChange);
