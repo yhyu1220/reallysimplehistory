@@ -1,6 +1,6 @@
 #summary Release notes for RSH 0.6 RC1
 
-Brian and Brad are happy to announce Really Simple History 0.6 Release Candidate 1. This release represents many enhancements over 0.4 and many bug-fixes over 0.6 beta. The final, stable release of 0.6 is scheduled for December 1, 2007.
+Brian and Brad are happy to announce Really Simple History 0.6. This release represents many enhancements over 0.4 and many bug-fixes over 0.6 beta. The final, stable version of 0.6 was released on 12.03.2007. For people who downloaded 0.6RC1, the only changes were the inclusion of a minified version of rsh.js and more complete release notes. All other users should upgrade ASAP.
 
 == Where to get it ==
 
@@ -13,6 +13,11 @@ For up-to-the-minute revisions, visit the *[http://code.google.com/p/reallysimpl
 Visit the UsageInstructions page.
 
 == Changelog ==
+
+=== 0.6 Final ===
+
+  * Added more complete release notes to the README file.
+  * Added a minified version of rsh.js using Dojo ShrinkSafe.
 
 === 0.6 RC 1 ===
 
@@ -45,7 +50,7 @@ Visit the UsageInstructions page.
 
 == Known issues ==
 
-*[http://code.google.com/p/reallysimplehistory/issues/list SEE THE ISSUES TAB]*
+*[http://code.google.com/p/reallysimplehistory/issues/list SEE THE ISSUES TAB]* and the release notes.
 
 == Supported and unsupported browsers ==
 
