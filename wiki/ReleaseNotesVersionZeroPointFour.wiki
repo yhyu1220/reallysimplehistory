@@ -1,6 +1,8 @@
 #summary Release notes for version 0.4 - adapted from Brad Neuberg's original site.
 
-*We encourage all users to upgrade from 0.4 to the new 0.6 release. 0.6 RC1 is out now; the final version is scheduled for 12.01.2007.*
+=This version of RSH is deprecated=
+
+*These release notes are for the original, 2005 public release of RSH. They are archived here for historical purposes only. If you wish to use RSH, please download the current version and refer to its release notes.*
 
 =What is This?=
 
