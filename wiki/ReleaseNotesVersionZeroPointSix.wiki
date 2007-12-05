@@ -1,4 +1,4 @@
-#summary Release notes for RSH 0.6 RC1
+#summary Release notes for RSH 0.6
 
 Brian and Brad are happy to announce Really Simple History 0.6. This release represents many enhancements over 0.4 and many bug-fixes over 0.6 beta. The final, stable version of 0.6 was released on 12.03.2007. For people who downloaded 0.6RC1, the only changes were the inclusion of a minified version of rsh.js and more complete release notes. All other users should upgrade ASAP.
 
