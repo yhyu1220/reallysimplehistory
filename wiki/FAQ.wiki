@@ -1,6 +1,6 @@
 #summary Frequently asked questions about Really Simple History.
 
-== Why isn't RSH written as a plug-in for Prototype, jQuery, YUI or \[insert name of Ajax framework here\]? ==
+== Why isn't RSH written as a plug-in for Prototype, jQuery, YUI or `[insert name of Ajax framework here]`? ==
 
 To maintain its portability and usefulness to a wide variety of developers, RSH is written in POJS (plain old JavaScript). That way, it works with all Ajax frameworks.
 
@@ -8,6 +8,6 @@ To maintain its portability and usefulness to a wide variety of developers, RSH 
 
 Minimized, the library is only 12k, not including the required JSON parser. For sites who already employ an Ajax framework with a JSON parser, RSH can be configured to use the framework's existing JSON functionality with just a couple lines of code. Otherwise, it ships with your choice of two parsers, both of which can themselves be minified.
 
-== Why doesn't RSH work with \[insert name of browser here\]? ==
+== Why doesn't RSH work with `[insert name of browser here]`? ==
 
 RSH relies on a collection of browser-specific hacks to work. The more browsers it tries to support, the larger and more difficult to maintain the library becomes. By supporting IE6+, Firefox 1.5+ (and its Gecko-based equivalents), Opera 9+ and Safari/Mac 2.03+, RSH supports the same A-grade, modern browsers as most Ajax applications.
