@@ -1,6 +1,6 @@
 #summary Version history for Really Simple History
 
-*All versions can be downloaded from the [http://code.google.com/p/reallysimplehistory/downloads/list downloads tab]*
+*All current and deprecated versions can be downloaded from the [http://code.google.com/p/reallysimplehistory/downloads/list downloads tab]. The latest - and highly unstable - exploratory code can be checked out from the [http://code.google.com/p/reallysimplehistory/source source tab], but it is not recommended for application development or production code.*
 
 = Stable Production Version =
 
