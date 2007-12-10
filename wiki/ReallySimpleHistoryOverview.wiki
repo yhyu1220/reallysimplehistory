@@ -41,6 +41,6 @@ Version 0.6 was released as a beta on 10.23.2007. It is now deprecated.
 
 == 0.4 ==
 
-Brad Neuberg's original 0.4 version from 2005 is still the latest public release.
+Brad Neuberg's original first stable production version, released in 2005, is now deprecated.
 
   * [ReleaseNotesVersionZeroPointFour 0.4 release notes]
