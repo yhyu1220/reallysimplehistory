@@ -6,7 +6,7 @@ Brian and Brad are happy to announce Really Simple History 0.6. This release rep
 
 For latest stable, packaged-up ZIP files, go to the *[http://code.google.com/p/reallysimplehistory/downloads/list downloads tab]*
 
-For up-to-the-minute revisions, visit the *[http://code.google.com/p/reallysimplehistory/source SVN repo]*.
+For up-to-the-minute revisions, visit the *[http://code.google.com/p/reallysimplehistory/source SVN repo]*. However, *do not use the SVN repo for production code. SVN code is by its nature unstable; the only versions recommended for application development are the packaged-up releases on the [http://code.google.com/p/reallysimplehistory/downloads/list downloads tab].
 
 == How to use it ==
 
