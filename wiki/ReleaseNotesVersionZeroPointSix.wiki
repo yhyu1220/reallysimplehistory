@@ -10,7 +10,9 @@ For up-to-the-minute revisions, visit the *[http://code.google.com/p/reallysimpl
 
 == How to use it ==
 
-Visit the UsageInstructions page.
+For basic installation notes, visit the [UsageInstructions Usage Instructions] page.
+
+For step-by-step instructions, visit the [UsageExamples Usage Examples] page.
 
 == Changelog ==
 
