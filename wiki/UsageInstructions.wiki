@@ -1,4 +1,4 @@
-#summary Usage instructions and examples for Really Simple History
+#summary Basic installation instructions for RSH.
 
 *These instructions are for RSH 0.6. For deployment of 0.4, see the [ReleaseNotesVersionZeroPointFour release notes] for that version.*
 
