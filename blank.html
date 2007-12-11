@@ -22,6 +22,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 <head>
 
 <script language="JavaScript">
+if (window.parent) {
+	document.title = window.parent.document.title;
+}
 function pageLoaded() {
 	window.parent.dhtmlHistory.iframeLoaded(window.location);
 	if (window.parent.historyStorage.debugMode) {
