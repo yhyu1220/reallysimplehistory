@@ -190,7 +190,6 @@ window.dhtmlHistory = {
 			/*IE history is keyed off the iframe, so we need to update its title, too*/
 			if (this.isIE) {
 				this.iframe.contentWindow.document.title = winTitle;
-				alert(this.iframe.contentWindow.document.title);
 			}
 			document.title = winTitle;
 		}
