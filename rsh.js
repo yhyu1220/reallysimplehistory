@@ -178,6 +178,24 @@ window.dhtmlHistory = {
 		}
 	},
 	
+	/*Public: Change the current HTML title*/
+	changeTitle: function(historyData) {
+		/*change the document title if called to do so*/
+		if (historyData && historyData.newTitle) {
+			/*Plug new title into the base title or use it raw if none is found*/
+			var winTitle = this.baseTitle
+				? this.baseTitle.replace('@@@', historyData.newTitle)
+				: historyData.newTitle
+			;
+			/*IE history is keyed off the iframe, so we need to update its title, too*/
+			if (this.isIE) {
+				this.iframe.contentWindow.document.title = winTitle;
+				alert(this.iframe.contentWindow.document.title);
+			}
+			document.title = winTitle;
+		}
+	},
+	
 	/*Public: Add a history point. Parameters available:
 	* newLocation (required):
 		This will be the #hash value in the URL. Users can bookmark it. It will persist across sessions, so
@@ -188,25 +206,11 @@ window.dhtmlHistory = {
 		to your application until the browser is closed. If the user comes back to a bookmarked history point
 		during a later session, this data will no longer be available. Don't rely on it for application
 		re-initialization from a bookmark.
-	* newTitle (optional):
+	* historyData.newTitle (optional):
 		This will swap out the html <title> attribute with a new value. If you have set a baseTitle using the
 		options bundle, the value will be plugged into the baseTitle by swapping out the @@@ replacement param.
 	*/
-	add: function(newLocation, historyData, newTitle) {
-		
-		/*change the document title if called to do so*/
-		if (newTitle) {
-			/*Plug new title into the base title or use it raw if none is found*/
-			var winTitle = this.baseTitle
-				? this.baseTitle.replace('@@@', newTitle)
-				: newTitle
-			;
-			/*IE history is keyed off the iframe, so we need to update its URL, too*/
-			if (this.isIE) {
-				this.iframe.contentWindow.document.title = winTitle;
-			}
-			document.title = winTitle;
-		}
+	add: function(newLocation, historyData) {
 		
 		/*Escape the location and remove any leading hash symbols*/
 		var encodedLocation = this.removeHash(encodeURIComponent(newLocation));
@@ -226,6 +230,8 @@ window.dhtmlHistory = {
 			/*Save this to the Safari form field*/
 			this.putSafariState(encodedLocation);
 
+			this.changeTitle(hitoryData);
+
 		} else {
 			
 			/*Most browsers require that we wait a certain amount of time before changing the location, such
@@ -233,7 +239,7 @@ window.dhtmlHistory = {
 			we internally handle it by putting requests in a queue.*/
 			var that = this;
 			var addImpl = function() {
-
+				
 				/*Indicate that the current wait time is now less*/
 				if (that.currentWaitTime > 0) {
 					that.currentWaitTime = that.currentWaitTime - that.waitTime;
@@ -261,7 +267,7 @@ window.dhtmlHistory = {
 
 				/*Save this as our current location*/
 				that.currentLocation = encodedLocation;
-		
+				
 				/*Change the browser location*/
 				window.location.hash = encodedLocation;
 
@@ -272,6 +278,9 @@ window.dhtmlHistory = {
 
 				/*End of atomic location change block for IE*/
 				that.ieAtomicLocationChange = false;
+				
+				that.changeTitle(historyData);
+				
 			};
 
 			/*Now queue up this add request*/
@@ -297,7 +306,7 @@ window.dhtmlHistory = {
 	/*Private: Constant for our own internal history event called when the page is loaded*/
 	PAGELOADEDSTRING: "DhtmlHistory_pageLoaded",
 	
-	VERSIONNUMBER: "0.6",
+	VERSIONNUMBER: "0.8",
 	
 	/*Private: Pattern for title changes. Example: "Armchair DJ [@@@]" where @@@ will be relaced by values passed to add()*/
 	baseTitle: null,
@@ -450,10 +459,13 @@ window.dhtmlHistory = {
 
 	/*Private: Notify the listener of new history changes.*/
 	fireHistoryEvent: function(newHash) {
+		var decodedHash = decodeURIComponent(newHash)
 		/*extract the value from our history storage for this hash*/
-		var historyData = historyStorage.get(decodeURIComponent(newHash));
+		var historyData = historyStorage.get(decodedHash);
+		this.changeTitle(historyData);
 		/*call our listener*/
-		this.listener.call(null, decodeURIComponent(newHash), historyData);
+		this.listener.call(null, decodedHash, historyData);
+		//this.add(decodedHash, historyData);
 	},
 	
 	/*Private: See if the browser has changed location. This is the primary history mechanism for Firefox. For IE, we use this to
