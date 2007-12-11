@@ -129,6 +129,7 @@ window.dhtmlHistory = {
 			} else {
 				/*This isn't our first page load, so indicate that we want to pay attention to this location change*/
 				this.ignoreLocationChange = false;
+				this.firstLoad = false;
 				/*For browsers other than IE, fire a history change event; on IE, the event will be thrown automatically when its
 				hidden iframe reloads on page load. Unfortunately, we don't have any listeners yet; indicate that we want to fire
 				an event when a listener is added.*/
@@ -147,6 +148,10 @@ window.dhtmlHistory = {
 	/*Public: Initialize our DHTML history. You must call this after the page is finished loading. Optionally, you can pass your listener in
 	here so you don't need to make a separate call to addListener*/
 	initialize: function(listener) {
+
+		/*save original document title to plug in when we hit a null-key history point*/
+		this.originalTitle = document.title;
+		
 		/*IE needs to be explicitly initialized. IE doesn't autofill form data until the page is finished loading, so we have to wait*/
 		if (this.isIE) {
 			/*If this is the first time this page has loaded*/
@@ -180,18 +185,34 @@ window.dhtmlHistory = {
 	
 	/*Public: Change the current HTML title*/
 	changeTitle: function(historyData) {
-		/*change the document title if called to do so*/
-		if (historyData && historyData.newTitle) {
-			/*Plug new title into the base title or use it raw if none is found*/
-			var winTitle = this.baseTitle
-				? this.baseTitle.replace('@@@', historyData.newTitle)
-				: historyData.newTitle
-			;
-			/*IE history is keyed off the iframe, so we need to update its title, too*/
-			if (this.isIE) {
-				this.iframe.contentWindow.document.title = winTitle;
+		var winTitle = (historyData && historyData.newTitle
+			/*Plug the new title into the pattern*/
+			? this.baseTitle.replace('@@@', historyData.newTitle)
+			/*Otherwise, if there is no new title, use the original document title. This is useful when some
+			history changes have title changes and some don't; we can automatically return to the original
+			title rather than leaving a misleading title in the title bar. The same goes for our "virgin"
+			(hashless) page state.*/
+			: this.originalTitle
+		);
+		/*No need to do anything if the title isn't changing*/
+		if (document.title == winTitle) {
+			return;
+		}
+
+		/*Now change the DOM*/
+		document.title = winTitle;
+		/*Change it in the iframe, too, for IE*/
+		if (this.isIE) {
+			this.iframe.contentWindow.document.title = winTitle;
+		}
+		
+		/*If non-IE, reload the hash so the new title "sticks" in the browser history object*/
+		if (!this.isIE) {
+			var hash = decodeURIComponent(document.location.hash);
+			if (hash != "") {
+				var encodedHash = encodeURIComponent(this.removeHash(hash));
+				document.location.hash = encodedHash;
 			}
-			document.title = winTitle;
 		}
 	},
 	
@@ -211,8 +232,10 @@ window.dhtmlHistory = {
 	*/
 	add: function(newLocation, historyData) {
 		
+		var that = this;
+		
 		/*Escape the location and remove any leading hash symbols*/
-		var encodedLocation = this.removeHash(encodeURIComponent(newLocation));
+		var encodedLocation = encodeURIComponent(this.removeHash(newLocation));
 		
 		if (this.isSafari) {
 
@@ -223,20 +246,19 @@ window.dhtmlHistory = {
 			/*Save this as our current location*/
 			this.currentLocation = encodedLocation;
 	
+			this.changeTitle(historyData);
+
 			/*Change the browser location*/
 			window.location.hash = encodedLocation;
 		
 			/*Save this to the Safari form field*/
 			this.putSafariState(encodedLocation);
 
-			this.changeTitle(hitoryData);
-
 		} else {
 			
 			/*Most browsers require that we wait a certain amount of time before changing the location, such
 			as 200 MS; rather than forcing external callers to use window.setTimeout to account for this,
 			we internally handle it by putting requests in a queue.*/
-			var that = this;
 			var addImpl = function() {
 				
 				/*Indicate that the current wait time is now less*/
@@ -307,8 +329,14 @@ window.dhtmlHistory = {
 	
 	VERSIONNUMBER: "0.8",
 	
-	/*Private: Pattern for title changes. Example: "Armchair DJ [@@@]" where @@@ will be relaced by values passed to add()*/
-	baseTitle: null,
+	/*
+		Private: Pattern for title changes. Example: "Armchair DJ [@@@]" where @@@ will be relaced by values passed to add();
+		Default is just the title itself, hence "@@@"
+	*/
+	baseTitle: "@@@",
+	
+	/*Private: Placeholder variable for the original document title; will be set in ititialize()*/
+	originalTitle: null,
 	
 	/*Private: URL for the blank html file we use for IE; can be overridden via the options bundle. Otherwise it must be served
 	in same directory as this library*/
@@ -398,13 +426,17 @@ window.dhtmlHistory = {
 		var stackID = "rshSafariStack";
 		var lengthID = "rshSafariLength";
 		var formStyles = historyStorage.debugMode ? historyStorage.showStyles : historyStorage.hideStyles;
-		var inputStyles = (historyStorage.debugMode
+		var stackStyles = (historyStorage.debugMode
+			? 'width: 800px;height:80px;border:1px solid black;'
+			: historyStorage.hideStyles
+		);
+		var lengthStyles = (historyStorage.debugMode
 			? 'width:800px;height:20px;border:1px solid black;margin:0;padding:0;'
 			: historyStorage.hideStyles
 		);
 		var safariHTML = '<form id="' + formID + '" style="' + formStyles + '">'
-			+ '<input type="text" style="' + inputStyles + '" id="' + stackID + '" value="[]"/>'
-			+ '<input type="text" style="' + inputStyles + '" id="' + lengthID + '" value=""/>'
+			+ '<textarea style="' + stackStyles + '" id="' + stackID + '">[]</textarea>'
+			+ '<input type="text" style="' + lengthStyles + '" id="' + lengthID + '" value=""/>'
 		+ '</form>';
 		document.write(safariHTML);
 		this.safariStack = document.getElementById(stackID);

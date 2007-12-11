@@ -54,25 +54,35 @@ function printBrowserInfo() {
 /*set up test cases for dhtmlHistory*/
 var rawIndex = 0;
 var rawMaterial = [
-	["one", "Hello World Data", "title one"],
-	["two", 33, "title two"],
-	["three", true, "title three"],
-	["four", true, "title four"],
-	["5","let's try a digit", "title five"],
-	["four","value of 'four' has now been reset", "title six"],
+	["one", "Hello World Data"],
+	["two", 33],
+	["three", true],
+	["four", true],
+	["5","let's try a digit"],
+	["four","value of 'four' has now been reset"],
 	["complexObject",{
 		value1: "This is value1",
 		value2: "This is value2",
-		value3: ["This is array[0]","This is array[1]"]
-	}, "title seven"],
-	["seven",[0,1,"three","five",9], "title eight"],
-	["8","more data", "title nine"],
+		value3: ["This is array[0]"]
+	}],
+	["seven",[0,1,"three","five",9]],
+	["8","more data"],
 	["complexObject",{
 		new1: "all-new",
 		new2: "all-different",
 		new3: ["it's","the","uncanny","complexObject"]
-	}, "title 10"],
-	["two words","let's see how this thing handles keys with spaces in them", "title 11"]
+	}],
+	["two words","let's see how this thing handles keys with spaces in them"],
+	["hashKey=hashValue&anotherHashKey=anotherHashValue","let's see how this thing handles pseudo-querystring keys"]
+];
+
+var titleIndex = 0;
+var titleMaterial = [
+	["titleHashOne",{newTitle: "new title one", newData: "one"}],
+	["titleHashTwo",{newTitle: "new title two", newData: "two"}],
+	["titleHashThree",{newTitle: "new title three", newData: "three"}],
+	["titleHashFour",{newTitle: "new title four", newData: "four"}],
+	["titleHashFive",{newTitle: "new title five", newData: "five"}]
 ];
 
 function callHSTest(hash,val) {
@@ -170,13 +180,37 @@ addHistoryEvent = function() {
 		rawIndex = 0;
 	}
 	var a = rawMaterial[rawIndex];
-	dhtmlHistory.add(a[0],a[1],a[2]);
-	if (typeof a[1] == "object") {/*stringify this so we can log it better*/
-		a[1] = historyStorage.toJSON(a[1]);
+	var key = a[0];
+	var value = a[1];
+
+	dhtmlHistory.add(key,value);
+
+	if (typeof value == "object") {/*stringify this so we can log it better*/
+		value = historyStorage.toJSON(value);
 	}
-	var msg = "<b>A history event has been added:</b> [newLocation=" + a[0] + " | historyData=" + a[1] + "]";
+	var msg = "<b>A history event has been added:</b> [newLocation=" + key + " | historyData=" + value + "]";
 	log(msg);
 	rawIndex++;
+}
+
+/* Our event handler to add history change events */
+addTitleEvent = function() {
+	if (!titleMaterial[titleIndex]) {
+		titleIndex = 0;
+	}
+	
+	var a = titleMaterial[titleIndex];
+	var key = a[0];
+	var value = a[1];
+
+	dhtmlHistory.add(key,value);
+
+	if (typeof value == "object") {/*stringify this so we can log it better*/
+		value = historyStorage.toJSON(value);
+	}
+	var msg = "<b>A history event has been added:</b> [newLocation=" + key + " | historyData=" + value + "]";
+	log(msg);
+	titleIndex++;
 }
 
 /*basic Ajax wrapper*/
@@ -327,6 +361,7 @@ window.onload = function() {
 |</p>
 <p>	
 	| <a href="javascript:addHistoryEvent();">add history</a>
+	| <a href="javascript:addTitleEvent();">change title</a>
 	| <a href="http://code.google.com/p/reallysimplehistory/">go off-site</a>
 	| <a href="javascript:testHistoryStorage();">test storage</a>
 	| <a href="javascript:testComplexXML();">test XML</a>
