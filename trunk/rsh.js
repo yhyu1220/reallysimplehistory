@@ -465,7 +465,6 @@ window.dhtmlHistory = {
 		this.changeTitle(historyData);
 		/*call our listener*/
 		this.listener.call(null, decodedHash, historyData);
-		//this.add(decodedHash, historyData);
 	},
 	
 	/*Private: See if the browser has changed location. This is the primary history mechanism for Firefox. For IE, we use this to
