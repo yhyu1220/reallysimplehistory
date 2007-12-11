@@ -97,10 +97,12 @@ window.dhtmlHistory = {
 		if (this.isIE) {
 			/*Optionally override the URL of IE's blank HTML file*/
 			if (options && options.blankURL) {
-				if (options.blankURL.indexOf("?") != options.blankURL.length - 1 && historyStorage.debugMode) {
-					throw new Error("Programmer error: options.blankURL must end with '?'");
-				}
-				this.blankURL = options.blankURL;
+				var u = options.blankURL;
+				/*assign the value, adding the trailing ? if it's not passed in*/
+				this.blankURL = (u.indexOf("?") != u.length - 1
+					? u + "?"
+					: u
+				);
 			}
 			this.createIE(initialHash);
 		}
