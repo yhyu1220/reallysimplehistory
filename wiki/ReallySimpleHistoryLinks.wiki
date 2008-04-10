@@ -16,6 +16,7 @@
 == Miscellaneous posts == 
 
  * [http://mattsnider.com/javascript/more-on-really-simple-history/ More on Really Simple History | Matt Snider JavaScript Resource]
+ * [http://mattsnider.com/javascript/using-json-objects-as-rsh-location/ Using JSON Objects as RSH Location | Matt Snider JavaScript Resource]
 
 = Non-RSH links = 
 
