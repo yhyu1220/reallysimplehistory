@@ -4,10 +4,13 @@
 
 == Brad Neuberg's posts ==
 
- * [http://www.onjava.com/pub/a/onjava/2005/10/26/ajax-handling-bookmarks-and-back-button.html ONJava.com -- AJAX: How to Handle Bookmarks and Back Buttons]
- * [http://codinginparadise.org/weblog/2005/09/safari-no-dhtml-history-possible.html Brad Neuberg: Coding In Paradise: Safari: No DHTML History Possible]
- * [http://codinginparadise.org/weblog/2006/06/ajax-history-support-in-safari.html Brad Neuberg: Coding In Paradise: Ajax History Support in Safari Possible?]
  * [http://codinginparadise.org/weblog/2005/09/ajax-history-libraries.html AJAX History Libraries]
+ * [http://codinginparadise.org/weblog/2005/09/safari-no-dhtml-history-possible.html Brad Neuberg: Coding In Paradise: Safari: No DHTML History Possible]
+ * [http://www.onjava.com/pub/a/onjava/2005/10/26/ajax-handling-bookmarks-and-back-button.html ONJava.com -- AJAX: How to Handle Bookmarks and Back Buttons]
+ * [http://codinginparadise.org/weblog/2006/06/ajax-history-support-in-safari.html Brad Neuberg: Coding In Paradise: Ajax History Support in Safari Possible?]
+ * [http://codinginparadise.org/weblog/2007/06/moving-on-coworking-really-simple.html|Moving On: Coworking, Really Simple History, and Flash Storage]
+ * [http://codinginparadise.org/weblog/2007/11/really-simple-history-06-beta.html|Really Simple History 0.6 Beta]
+ * [http://codinginparadise.org/weblog/2007/12/really-simple-history-06-released.html|Really Simple History 0.6 Released|Really Simple History 0.6 Released]
 
 == Brian Dillard's posts ==
 
@@ -15,8 +18,11 @@
 
 == Miscellaneous posts == 
 
+ * [http://ajaxian.com/archives/will-ie8-html5-make-rsh-irrelevant Will IE8 make RSH irrelevant?]
  * [http://mattsnider.com/javascript/more-on-really-simple-history/ More on Really Simple History | Matt Snider JavaScript Resource]
  * [http://mattsnider.com/javascript/using-json-objects-as-rsh-location/ Using JSON Objects as RSH Location | Matt Snider JavaScript Resource]
+ * [http://mattsnider.com/architecture/session-driven-back/|Session Driven Back]
+ * [http://www.43folders.com/2008/02/08/javascript-browser-history|Clever web dev trick for checking browser history]
 
 = Non-RSH links = 
 
@@ -29,6 +35,7 @@
  * [http://www.akmattie.net/blog/dshistory/usage.html dsHistory usage instructions]
  * [http://www.asp.net/ajax/AjaxControlToolkit/ ASP.NET AJAX Control Toolkit : The Official Microsoft ASP.NET 2.0 Site]
  * [http://cvs.horde.org/dimp/js/src/dhtmlHistory.js SVN home for a Prototype-based offshoot of RSH 0.4]
+ * [http://www.mytakeon.net/post/2008/02/You-should-never-forget-your-(browser)-history.aspx|You should never forget your (browser) history]
  * LINK NEEDED: Dojo history/bookmarking solution
 
 == Posts about Ajax history/bookmarking ==
