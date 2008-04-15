@@ -54,3 +54,4 @@
  * [http://www.contentwithstyle.co.uk/Articles/38/fixing-the-back-button-and-enabling-bookmarking-for-ajax-apps Content With Style: Fixing the Back Button and Enabling Bookmarking for AJAX Apps]
  * [http://www.streampad.com/blog/?p=110 Back button now in use! (Getting history working in Safari)]
  * [http://www.isolani.co.uk/blog/javascript/FixingTheBackButtonThatAjaxBroke Fixing the back button that AJAX broke]
+ * [http://www.hunlock.com/blogs/Mastering_The_Back_Button_With_Javascript|Mastering The Back Button With Javascript]
