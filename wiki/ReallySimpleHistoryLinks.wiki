@@ -28,6 +28,7 @@
 
 == Libraries for Ajax history/bookmarking ==
 
+ * [http://stilbuero.de/jquery/history/History/Remote - jQuery plugin solution for hijaxing links and enabling history]
  * [http://exanimo.com/javascript/using-the-statemanager-in-ajax-apps/ State Manager: Flash history manager that also works with Ajax]
  * [http://developer.yahoo.com/yui/history/ Yahoo! UI Library: Browser History Manager]
  * [http://www.mikage.to/jquery/jquery_history.html jQuery History Plugin]
