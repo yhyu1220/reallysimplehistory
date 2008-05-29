@@ -1,0 +1,34 @@
+<html>
+
+<head>
+
+<title>initial title</title>
+
+<script>
+
+var title = document.title;
+var counter = 0;
+var counter2 = 0;
+var addHash = function() {
+	setTimeout(function() {document.location.hash = counter2++;}, 0);
+}
+var changeTitle = function() {
+	setTimeout(function() {document.title = title + counter++;}, 0);
+}
+</script>
+
+</head>
+
+<body>
+
+<a href="javascript:addHash();">add hash</a>
+<BR><BR>
+<a href="javascript:changeTitle();">change title</a>
+<BR><BR>
+<a href="javascript:addHash();changeTitle();">hash, then title</a>
+<BR><BR>
+<a href="javascript:changeTitle();addHash();">title, then hash</a>
+
+</body>
+
+</html>

@@ -209,11 +209,13 @@ window.dhtmlHistory = {
 		}
 		
 		/*If non-IE, reload the hash so the new title "sticks" in the browser history object*/
-		if (!this.isIE) {
+		if (!this.isIE && !this.isOpera) {
 			var hash = decodeURIComponent(document.location.hash);
 			if (hash != "") {
 				var encodedHash = encodeURIComponent(this.removeHash(hash));
 				document.location.hash = encodedHash;
+			} else {
+				//document.location.hash = "#";
 			}
 		}
 	},
@@ -248,13 +250,13 @@ window.dhtmlHistory = {
 			/*Save this as our current location*/
 			this.currentLocation = encodedLocation;
 	
-			this.changeTitle(historyData);
-
 			/*Change the browser location*/
 			window.location.hash = encodedLocation;
 		
 			/*Save this to the Safari form field*/
 			this.putSafariState(encodedLocation);
+
+			this.changeTitle(historyData);
 
 		} else {
 			
