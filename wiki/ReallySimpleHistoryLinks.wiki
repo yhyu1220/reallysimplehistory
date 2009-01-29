@@ -14,7 +14,7 @@
 
 == Brian Dillard's posts ==
 
- * [http://blogs.pathf.com/agileajax/really_simple_history/index.html Agile Ajax RSH tag page]
+ * [http://www.pathf.com/blogs/tag/really-simple-history/}Agile Ajax RSH tag]
 
 == Miscellaneous posts == 
 
